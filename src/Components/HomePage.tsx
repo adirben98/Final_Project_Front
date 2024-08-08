@@ -18,13 +18,27 @@ const HomePage: React.FC = () => {
 
   const imageStyle: React.CSSProperties = {
     width: '100%',
-    height: '600px',
+    height: '70%',
     objectFit: 'cover',
+  };
+
+  const contentStyle: React.CSSProperties = {
+    backgroundColor: 'white',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+    borderRadius: '8px',
+    width: '100%',
+    maxWidth: '1200px', 
+    margin: '0 20px', 
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   };
 
   return (
     <div className="background">
-      <div className="content">
+      <div style={contentStyle}>
         <img 
           src={whatsApp} 
           alt="Top Banner" 
@@ -49,8 +63,8 @@ const HomePage: React.FC = () => {
           </ul>
         </section>
 
-        <section style={{ width: '100%' }}>
-          <h2 style={subHeaderStyle}>Meet Your Heroes</h2>
+        <section>
+          <h2>Meet Your Heroes</h2>
           <div id="carouselExampleFade" className="carousel slide carousel-fade" data-bs-ride="carousel">
             <div className="carousel-inner">
               {heroes.map((hero, index) => (
