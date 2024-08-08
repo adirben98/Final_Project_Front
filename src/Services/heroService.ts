@@ -1,12 +1,16 @@
 import { apiClient } from "./useAuth";
+export interface IHero{
+    name: string;
+    image: string;
+}
 
 class heroService{
     getHeroes(){
         const controller = new AbortController();
-        const heroes= apiClient.get("/hero",{
+        const getHeroes= apiClient.get<IHero[]>("/hero",{
             signal: controller.signal
         })
-        return {heroes, cancelHeroes:()=>controller.abort()}
+        return {getHeroes, cancelHeroes:()=>controller.abort()}
     }
     
 }
