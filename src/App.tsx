@@ -4,22 +4,28 @@ import HomePage from "./Components/HomePage";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import ProfilePage from "./Components/ProfilePage";
+import SearchBar from "./Components/SearchBar";
+import HeaderLayout from "./Components/HeaderLayout";
 import NotFound from "./Components/NotFound";
-// import Background from "./Components/Background";
+import BookReview from "./Components/BookReview";
+import Book from "./Components/Book";
 
 const App: React.FC = () => {
   return (
-    // <Background>
       <Router>
         <Routes>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          <Route element={<HeaderLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="profile/:name" element={<ProfilePage />} />
+          <Route path="book/:id" element={<BookReview />} />
+          <Route path="/newBook" element={<Book/>}></Route>
+            <Route path="profile/:name" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="/search" element={<SearchBar />} />
+        </Route>
+      </Routes>
       </Router>
-    // </Background>
   );
 };
 
