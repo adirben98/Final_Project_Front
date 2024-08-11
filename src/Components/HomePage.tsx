@@ -26,7 +26,6 @@ const HomePage: React.FC = () => {
     width: "100%", 
     height: "auto", 
     objectFit: "cover",
-    marginTop: "1000px",
   };
 
   const contentStyle: React.CSSProperties = {
@@ -40,6 +39,8 @@ const HomePage: React.FC = () => {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    minHeight: "100vh", // Ensure the content area is at least the height of the viewport
+    paddingTop: "20px", // Adjust paddingTop to fit the image nicely
   };
 
   const carouselContainerStyle: React.CSSProperties = {
@@ -135,7 +136,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', paddingTop: '1500px' }}>
       <img src={homePageImg} alt="Homepage Banner" style={imageStyle} />
 
       <div style={contentStyle}>
@@ -175,8 +176,8 @@ const HomePage: React.FC = () => {
         </section>
 
         <section style={carouselContainerStyle}>
-          <h2 style={{ textAlign: "left" }}>Meet Your Heroes</h2>
-          <div style={{ width: '50%', padding: "50px", margin: "0 auto",}}>
+          <h2 style={ subHeaderStyle }>Meet Your Heroes</h2>
+          <div style={{ width: '50%', padding: "50px", margin: "0 auto" }}>
             <Slider {...settings}>
               {heroes.map((hero, index) => (
                 <div key={index}>
