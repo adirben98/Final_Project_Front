@@ -3,7 +3,7 @@ import registerService, { IUser } from "../Services/authService";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useEffect } from "react";
 import UserService from "../Services/userService";
-import backgroundImage from "../assets/background.png";
+//import backgroundImage from "../assets/background.png";
 
 
 export default function LoginForm() {
@@ -47,7 +47,7 @@ export default function LoginForm() {
           alignItems: "center",
           height: "100vh",
           width: "100vw",
-          backgroundImage: `url(${backgroundImage})`,
+        //   backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           padding: "20px",

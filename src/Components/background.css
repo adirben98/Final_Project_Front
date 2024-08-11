@@ -1,0 +1,19 @@
+.background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../assets/background.png');
+  background-size: contain; 
+  background-position: center;
+  min-height: 100vh;
+}
+
+.content {
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 80%; 
+  max-width: 1200px;
+  margin: 20px;
+}
