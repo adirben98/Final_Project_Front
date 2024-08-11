@@ -5,8 +5,8 @@ const HeaderLayout = () => {
   return (
     <div>
       <Header />
-      <div style={{ marginTop: "100px" }}>
-          <Outlet />
+      <div style={{ paddingTop: "200px" }}> {/* Matches header height */}
+        <Outlet />
       </div>
     </div>
   );

@@ -15,23 +15,24 @@ export default function Header() {
     if (userImg !== "") setImage(userImg);
     console.log(userService.getConnectedUser()!.image);
    
-    return () => {
-    };
+    return () => {};
   }, [isLoading]);
 
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light bg-light fixed-top"
-      style={{ fontSize: "1.5rem", padding: "1rem 2.5rem", height: "100px" }}
+      style={{
+        fontSize: "1.5rem",
+        padding: "1rem 2.5rem",
+        height: "100px", // Ensure this matches padding-top in HeaderLayout
+        zIndex: 1000, // Keep the header above other content
+      }}
     >
-      <div
-        className="container-fluid"
-        style={{ width: "100%", padding: "0" }}
-      >
+      <div className="container-fluid" style={{ width: "100%", padding: "0" }}>
         <a className="navbar-brand" href="/" style={{ padding: "0" }}>
           <img
             src={bookifyLogo}
-            style={{ width: "100px", height: "100px" }}
+            style={{ width: "100px", height: "100px" }} // Keep this consistent with the header height
             alt="Bookify"
           />
         </a>
