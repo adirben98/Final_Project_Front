@@ -5,11 +5,11 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import ProfilePage from "./Components/ProfilePage";
 import NotFound from "./Components/NotFound";
-import Background from "./Components/Background";
+// import Background from "./Components/Background";
 
 const App: React.FC = () => {
   return (
-    <Background>
+    // <Background>
       <Router>
         <Routes>
           <Route path="/register" element={<Register />}></Route>
@@ -19,7 +19,7 @@ const App: React.FC = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-    </Background>
+    // </Background>
   );
 };
 
