@@ -8,7 +8,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ChevronLeft, ChevronRight } from "react-feather";
-import { FaBook } from 'react-icons/fa'; // Import book symbol
+import { FaBook } from 'react-icons/fa';
 
 const HomePage: React.FC = () => {
   const topBooks: string[] = ["Book 1", "Book 2", "Book 3", "Book 4", "Book 5"];
@@ -19,11 +19,12 @@ const HomePage: React.FC = () => {
     color: "#4682B4",
     marginBottom: "10px",
     textShadow: "1px 1px #87CEEB",
+    textAlign: "left", 
   };
 
   const imageStyle: React.CSSProperties = {
-    width: "100%", // Full width
-    height: "auto", // Maintain aspect ratio
+    width: "100%", 
+    height: "auto", 
     objectFit: "cover",
     marginTop: "1000px",
   };
@@ -42,18 +43,19 @@ const HomePage: React.FC = () => {
   };
 
   const carouselContainerStyle: React.CSSProperties = {
-    width: '100%',
+    width: '100%', // Make the carousel narrower
     marginTop: '40px',
   };
 
   const heroImageStyle: React.CSSProperties = {
-    width: 'auto', // Adjusts based on height
-    height: '300px', // Smaller fixed height
-    maxWidth: '100%', // Ensure image doesn't overflow container
+    width: 'auto', 
+    height: '300px', 
+    maxWidth: '100%', 
     objectFit: 'cover',
     margin: '0 auto',
     padding: '10px',
   };
+
   const heroNameStyle: React.CSSProperties = {
     textAlign: 'center',
     marginTop: '10px',
@@ -108,17 +110,17 @@ const HomePage: React.FC = () => {
   };
 
   const openingPhraseStyle: React.CSSProperties = {
-    fontSize: "2.5em", // Larger header size
+    fontSize: "2.5em", 
     color: "#333",
-    fontFamily: "'Dancing Script', cursive", // Unique font style
-    textAlign: "center",
+    fontFamily: "'Dancing Script', cursive", 
+    textAlign: "left", 
     margin: "20px 0",
   };
 
   const descriptionStyle: React.CSSProperties = {
     fontSize: "1.2em",
     color: "#555",
-    textAlign: "center",
+    textAlign: "left", 
     margin: "20px 0",
     lineHeight: "1.6",
     fontFamily: "'Roboto', sans-serif", 
@@ -173,8 +175,8 @@ const HomePage: React.FC = () => {
         </section>
 
         <section style={carouselContainerStyle}>
-          <h2>Meet Your Heroes</h2>
-          <div style={{width: '100%', position: 'relative' }}>
+          <h2 style={{ textAlign: "left" }}>Meet Your Heroes</h2>
+          <div style={{ width: '50%', padding: "50px", margin: "0 auto",}}>
             <Slider {...settings}>
               {heroes.map((hero, index) => (
                 <div key={index}>
