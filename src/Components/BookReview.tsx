@@ -12,7 +12,7 @@ import userService from "../Services/userService";
 import bookService, { IBook } from "../Services/bookService";
 import commentService from "../Services/commentService";
 
-export default function Recipe() {
+export default function BookReview() {
   const googleFontUrl =
     "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap";
   const { id } = useParams();

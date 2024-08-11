@@ -6,6 +6,7 @@ import Register from "./Components/Register";
 import ProfilePage from "./Components/ProfilePage";
 import NotFound from "./Components/NotFound";
 import Background from "./Components/Background";
+import BookReview from "./Components/BookReview";
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/" element={<HomePage />} />
+          <Route path="book/:id" element={<BookReview />} />
           <Route path="profile/:name" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
