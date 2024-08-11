@@ -25,6 +25,7 @@ const HomePage: React.FC = () => {
     width: "100%", // Full width
     height: "auto", // Maintain aspect ratio
     objectFit: "cover",
+    marginTop: "1000px",
   };
 
   const contentStyle: React.CSSProperties = {
