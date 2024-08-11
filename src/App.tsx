@@ -4,6 +4,8 @@ import HomePage from "./Components/HomePage";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import ProfilePage from "./Components/ProfilePage";
+import SearchBar from "./Components/SearchBar";
+import HeaderLayout from "./Components/HeaderLayout";
 
 const App: React.FC = () => {
   return (
@@ -11,8 +13,11 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/" element={<HomePage />} />
-        <Route path="profile/:name" element={<ProfilePage />} />
+        <Route element={<HeaderLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="profile/:name" element={<ProfilePage />} />
+          <Route path="/search" element={<SearchBar />} />
+        </Route>
       </Routes>
     </Router>
   );
