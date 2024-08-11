@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import "./background.css";
 import whatsApp from "../assets/WhatsApp Image 2024-07-27 at 14.14.49_c9f501b2.jpg";
 import heroService, { IHero } from "../Services/heroService";
 import useAuth from "../Services/useAuth";
@@ -86,7 +85,7 @@ const HomePage: React.FC = () => {
       <h2>Meet Your Heroes</h2>
       <div className = "max-w-lg">
         <div className="overflow-hidden relative">
-          <div className="flex">{heroes.map((hero, index) => <img src={hero.image}/>)}</div>
+          <div className="flex">{heroes.map((hero) => <img src={hero.image}/>)}</div>
           <div className="absolute inset-0 flex items-center justify-between p-4">
           <button>
             <ChevronLeft size = {40}/>
