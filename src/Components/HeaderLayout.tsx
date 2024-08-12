@@ -4,8 +4,8 @@ import Header from './Header';
 const HeaderLayout = () => {
   return (
     <div>
-      <Header />
-      <div style={{ marginTop: "100px" }}>
+     <Header/>
+      <div style={{  marginTop:'110px'}}>
           <Outlet />
       </div>
     </div>

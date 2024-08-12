@@ -59,7 +59,7 @@
     z-index: 0;
   }
   
-  /* Specific rule for the first paper to remove the blue border */
+  
   #p1 .front {
     border-left: none;
   }
