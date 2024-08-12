@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import homePageImg from "../assets/homePageImg.png";
 import heroService, { IHero } from "../Services/heroService";
 import useAuth from "../Services/useAuth";
 import Slider from 'react-slick';
