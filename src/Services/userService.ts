@@ -41,6 +41,12 @@ class userService {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
   }
+
+  search(query: string){
+    const controller = new AbortController();
+    const results = apiClient.get<IUser[]>(`/auth/search/${query}`, { signal: controller.signal });
+    return { results, cancelSearch: () => controller.abort() };
+  }
 }
 
 export default new userService();

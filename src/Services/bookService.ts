@@ -20,10 +20,17 @@ interface BooksAndFavorites {
 }
 
 class BookService {
+  getAll() {
+    const controller = new AbortController();
+    const getBooks = apiClient.get<IBook[]>("/book", {
+      signal: controller.signal,
+    });
+    return { getBooks, cancelBooks: () => controller.abort() };
+  }
   getBook(id: string) {
     const controller = new AbortController();
-    const getBook= apiClient.get<IBook>(`/book/${id}`);
-    return {getBook, cancelBook:()=>controller.abort()}
+    const getBook = apiClient.get<IBook>(`/book/${id}`);
+    return { getBook, cancelBook: () => controller.abort() };
   }
   getUserBooksAndFavorites(username: string) {
     const controller = new AbortController();
@@ -41,8 +48,8 @@ class BookService {
 
   isLiked(id: string) {
     const controller = new AbortController();
-    const isLiked= apiClient.get<boolean>(`/book/isLiked/${id}`);
-    return {isLiked, cancelIsLiked:()=>controller.abort()}
+    const isLiked = apiClient.get<boolean>(`/book/isLiked/${id}`);
+    return { isLiked, cancelIsLiked: () => controller.abort() };
   }
 
   like(id: string) {
@@ -51,6 +58,21 @@ class BookService {
 
   unlike(id: string) {
     return apiClient.put(`/book/unlike/${id}`);
+  }
+
+  search(query: string) {
+    const controller = new AbortController();
+    const results = apiClient.get<IBook[]>(`/book/search/${query}`, {
+      signal: controller.signal,
+    });
+    return { results, cancelSearch: () => controller.abort() };
+  }
+  searchByHero(name: string) {
+    const controller = new AbortController();
+    const results = apiClient.get<IBook>("/book/searchByHero/" + name, {
+      signal: controller.signal,
+    });
+    return { results, cancelSearch: () => controller.abort() };
   }
 
   deleteBook(id: string) {

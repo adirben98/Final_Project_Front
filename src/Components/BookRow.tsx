@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export interface bookRow {
   image: string;
   title: string;
-  description: string;
+  description?: string;
   url:string
 }
 

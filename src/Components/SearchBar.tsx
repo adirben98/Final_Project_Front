@@ -2,17 +2,18 @@ import { useState, ChangeEvent, FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
-
-//import recipeService from "../Services/recipe-service";
+import userService from "../Services/userService";
+import bookService from "../Services/bookService";
 
 interface SearchResults {
-  id: string;
+  id?: string;
   name: string;
 }
 
 export default function SearchBar() {
   const [searchResults, setSearchResults] = useState<SearchResults[]>([]);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const ref = useRef<HTMLInputElement>(null);
 
@@ -26,19 +27,27 @@ export default function SearchBar() {
       return;
     }
 
-    //const { results } = recipeService.searchRecipes(query);
-
     try {
       console.log("starting");
-      //   results.then((response) => {
-      //     console.log(response.data);
-      //     const recipes = response.data.map((recipe) => ({
-      //       id: recipe._id!,
-      //       name: recipe.name,
-      //     }));
-      //     setSearchResults(recipes);
-      //     setShowDropdown(true);
-      //   }).catch((err) => console.log(err));
+      bookService
+        .search(query)
+        .results.then((res) => {
+          console.log(res.data);
+          const data = res.data.map((book) => ({
+            id: book._id!,
+            name: book.title,
+          }));
+          setSearchResults(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      userService.search(query).results.then((res) => {
+        console.log(res.data);
+        const data = res.data.map((user) => ({ name: user.username }));
+        setSearchResults((prev) => [...prev, ...data]);
+        setShowDropdown(true);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -52,12 +61,16 @@ export default function SearchBar() {
     ref.current!.value = "";
 
     setShowDropdown(false);
-    navigate(`/search?q=${query}&f=search`);
+    navigate(`/search?q=${query}&f=books`);
   }
 
-  const handleItemClick = (id: string) => {
+  const handleItemClick = (id: string, name: string) => {
     ref.current!.value = "";
-    navigate(`/recipe/${id}`);
+    if (id === "") {
+      navigate(`/profile/${name}`);
+    } else {
+      navigate(`/book/${id}`);
+    }
     setShowDropdown(false);
   };
 
@@ -101,7 +114,10 @@ export default function SearchBar() {
                   borderBottom: "1px solid #ccc",
                   cursor: "pointer",
                 }}
-                onClick={() => handleItemClick(result.id)}
+                onClick={() => {
+                  if (result.id) handleItemClick(result.id, result.name);
+                  else handleItemClick("", result.name);
+                }}
               >
                 {result.name}
               </li>

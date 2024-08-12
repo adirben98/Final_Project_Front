@@ -4,14 +4,9 @@ import Header from './Header';
 const HeaderLayout = () => {
   return (
     <div>
-      <div style={{
-        width: '100%',
-        height: '150px',
-      }}>
-        <Header />
-      </div>
-      <div style={{ marginTop: "0px", padding: "20px" }}>
-        <Outlet />
+     <Header/>
+      <div style={{  marginTop:'110px'}}>
+          <Outlet />
       </div>
     </div>
   );

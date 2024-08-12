@@ -4,18 +4,31 @@ import useAuth from "../Services/useAuth";
 import bookifyLogo from "../assets/bookifyLogo.png";
 import avatar from "../assets/avatar.png";
 import userService from "../Services/userService";
+import heroService, { IHero } from "../Services/heroService";
 
 export default function Header() {
   const { isLoading } = useAuth();
   const [image, setImage] = useState<string>(avatar);
+  const [heroes, setHeroes] = useState<IHero[]>([]);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(false);
+  const { getHeroes, cancelHeroes } = heroService.getHeroes();
 
   useEffect(() => {
     const userImg = userService.getConnectedUser()!.image;
     if (userImg !== "") setImage(userImg);
     console.log(userService.getConnectedUser()!.image);
-   
-    return () => {};
+    getHeroes
+      .then((res) => {
+        setHeroes(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return () => {
+      cancelHeroes();
+    };
   }, [isLoading]);
 
   return (
@@ -28,6 +41,7 @@ export default function Header() {
         zIndex: 1000, // Keep the header above other content
       }}
     >
+      <div className="container-fluid" style={{ width: "100%", padding: "0" }}>
       <div className="container-fluid" style={{ width: "100%", padding: "0" }}>
         <a className="navbar-brand" href="/" style={{ padding: "0" }}>
           <img
@@ -65,7 +79,7 @@ export default function Header() {
             >
               <a
                 className="nav-link dropdown-toggle"
-                href="/apiCategories"
+                href="/heroes"
                 id="navbarDropdown"
                 role="button"
                 aria-haspopup="true"
@@ -85,13 +99,20 @@ export default function Header() {
                   zIndex: 1000,
                 }}
               >
-                {/* Add dropdown items here */}
+                {heroes.map((hero) => (
+                  <a
+                  key={hero.name}
+                  className="dropdown-item"
+                  href={`/heroPage?q=${hero.name}&f=hero`}
+                >
+                  {hero.name}
+                </a>))}
               </div>
             </li>
             <li className="nav-item">
               <a
                 className="nav-link"
-                href="/allRecipes"
+                href="/books"
                 style={{ fontSize: "1.5rem" }}
               >
                 Books
