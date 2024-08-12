@@ -11,6 +11,7 @@ import Book from "./Components/Book";
 import AllHeroes from "./Components/AllHeroes";
 import AllBooks from "./Components/AllBooks";
 import SearchPage from "./Components/SearchPage";
+import CreateStory from "./Components/CreateStory";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
         <Route path="/register" element={<Register />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route element={<HeaderLayout />}>
+        <Route path="/create" element={<CreateStory />} />
           <Route path="/heroes" element={<AllHeroes />} />
           <Route path="/books" element={<AllBooks />} />
           <Route path="/" element={<HomePage />} />

@@ -3,7 +3,6 @@ import registerService, { IUser } from "../Services/authService";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useEffect } from "react";
 import UserService from "../Services/userService";
-//import backgroundImage from "../assets/background.png";
 
 
 export default function LoginForm() {

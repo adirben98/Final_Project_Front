@@ -42,7 +42,6 @@ export default function Header() {
       }}
     >
       <div className="container-fluid" style={{ width: "100%", padding: "0" }}>
-      <div className="container-fluid" style={{ width: "100%", padding: "0" }}>
         <a className="navbar-brand" href="/" style={{ padding: "0" }}>
           <img
             src={bookifyLogo}

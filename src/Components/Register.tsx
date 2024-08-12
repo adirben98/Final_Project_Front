@@ -6,7 +6,6 @@ import uploadPhoto from "../Services/fileService";
 import { useForm } from "react-hook-form";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import registerService, { IUser } from "../Services/authService";
-//import backgroundImage from "../assets/background.png";
 import userService from "../Services/userService";
 
 export default function RegisterForm() {
