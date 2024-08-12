@@ -9,6 +9,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { FaBook } from 'react-icons/fa';
+import homePageVid from "../assets/homePageVid.mp4";
 
 const HomePage: React.FC = () => {
   const topBooks: string[] = ["Book 1", "Book 2", "Book 3", "Book 4", "Book 5"];
@@ -22,7 +23,7 @@ const HomePage: React.FC = () => {
     textAlign: "left", 
   };
 
-  const imageStyle: React.CSSProperties = {
+  const videoStyle: React.CSSProperties = {
     width: "100%", 
     height: "auto", 
     objectFit: "cover",
@@ -137,8 +138,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', paddingTop: '1500px' }}>
-      <img src={homePageImg} alt="Homepage Banner" style={imageStyle} />
-
+      <video src={homePageVid} autoPlay loop muted style={videoStyle} />
       <div style={contentStyle}>
         <section style={openingPhraseStyle}>
           Your Story, Your Way

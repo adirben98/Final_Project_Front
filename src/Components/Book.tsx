@@ -97,8 +97,13 @@ const Book: React.FC = () => {
   };
 
   return (
-    <div className="book-container" >
-      <button id="prev-btn" ref={prevBtnRef} onClick={goPrevPage}>
+    <div className="book-container">
+      <button
+        id="prev-btn"
+        ref={prevBtnRef}
+        onClick={goPrevPage}
+        style={{ display: currentLocation === 1 ? 'none' : 'block' }}
+      >
         <FontAwesomeIcon icon={faArrowCircleLeft} size="2x" />
       </button>
 
@@ -141,7 +146,12 @@ const Book: React.FC = () => {
         </div>
       </div>
 
-      <button id="next-btn" ref={nextBtnRef} onClick={goNextPage}>
+      <button
+        id="next-btn"
+        ref={nextBtnRef}
+        onClick={goNextPage}
+        style={{ display: currentLocation === maxLocation ? 'none' : 'block' }}
+      >
         <FontAwesomeIcon icon={faArrowCircleRight} size="2x" />
       </button>
     </div>
