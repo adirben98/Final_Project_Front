@@ -9,94 +9,71 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { FaBook } from 'react-icons/fa';
+import homePageVid from "../assets/homePageVid.mp4";
 
 const HomePage: React.FC = () => {
   const topBooks: string[] = ["Book 1", "Book 2", "Book 3", "Book 4", "Book 5"];
   const latestBooks: string[] = ["Latest Book 1", "Latest Book 2", "Latest Book 3"];
 
-  const styles = {
-    container: {
-      display: "flex",
-      flexDirection: "column" as const,
-      height: "100vh",
-    },
-    subHeader: {
-      fontSize: "1.8em",
-      color: "#4682B4",
-      marginBottom: "10px",
-      textShadow: "1px 1px #87CEEB",
-      textAlign: "left" as const,
-    },
-    image: {
-      width: "100%",
-      height: "auto",
-      objectFit: "cover" as const,
-      display: "block",
-    },
-    content: {
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-      paddingLeft: "20px",
-      paddingRight: "20px",
-      borderRadius: "8px",
-      width: "100%",
-      maxWidth: "1200px",
-      margin: "0 auto",
-      display: "flex",
-      flexDirection: "column" as const,
-      alignItems: "center",
-      flex: 1,
-    },
-    carouselContainer: {
-      width: '100%',
-      marginTop: '40px',
-    },
-    heroImage: {
-      width: 'auto',
-      height: '300px',
-      maxWidth: '100%',
-      objectFit: 'cover' as const,
-      margin: '0 auto',
-      padding: '10px',
-    },
-    heroName: {
-      textAlign: 'center' as const,
-      marginTop: '10px',
-      fontSize: '1.5em',
-      color: '#333',
-      fontFamily: "'Lobster', cursive",
-    },
-    arrow: {
-      position: 'absolute' as const,
-      top: '50%',
-      transform: 'translateY(-50%)',
-      zIndex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      borderRadius: '50%',
-      cursor: 'pointer',
-      padding: '5px',
-    },
-    openingPhrase: {
-      fontSize: "2.5em",
-      color: "#333",
-      fontFamily: "'Dancing Script', cursive",
-      textAlign: "left" as const,
-      margin: "20px 0",
-    },
-    description: {
-      fontSize: "1.2em",
-      color: "#555",
-      textAlign: "left" as const,
-      margin: "20px 0",
-      lineHeight: "1.6",
-      fontFamily: "'Roboto', sans-serif",
-    },
-    catchphrase: {
-      fontSize: "1.4em",
-      color: "#333",
-      textAlign: "center" as const,
-      margin: "20px 0",
-      fontFamily: "'Dancing Script', cursive",
-    },
+  const subHeaderStyle: React.CSSProperties = {
+    fontSize: "1.8em",
+    color: "#4682B4",
+    marginBottom: "10px",
+    textShadow: "1px 1px #87CEEB",
+    textAlign: "left", 
+  };
+
+  const videoStyle: React.CSSProperties = {
+    width: "100%", 
+    height: "auto", 
+    objectFit: "cover",
+  };
+
+  const contentStyle: React.CSSProperties = {
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    borderRadius: "8px",
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto", 
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    minHeight: "100vh", // Ensure the content area is at least the height of the viewport
+    paddingTop: "20px", // Adjust paddingTop to fit the image nicely
+  };
+
+  const carouselContainerStyle: React.CSSProperties = {
+    width: '100%', // Make the carousel narrower
+    marginTop: '40px',
+  };
+
+  const heroImageStyle: React.CSSProperties = {
+    width: 'auto', 
+    height: '300px', 
+    maxWidth: '100%', 
+    objectFit: 'cover',
+    margin: '0 auto',
+    padding: '10px',
+  };
+
+  const heroNameStyle: React.CSSProperties = {
+    textAlign: 'center',
+    marginTop: '10px',
+    fontSize: '1.5em',
+    color: '#333',
+    fontFamily: "'Lobster', cursive",
+  };
+
+  const arrowStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: '50%',
+    cursor: 'pointer',
   };
 
   const PreviousArrow = ({ onClick }: { onClick?: React.MouseEventHandler }) => (
@@ -135,11 +112,10 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <img src={homePageImg} alt="Homepage Banner" style={styles.image} />
-
-      <div style={styles.content}>
-        <section style={styles.openingPhrase}>
+    <div style={{ display: 'flex', flexDirection: 'column', paddingTop: '1500px' }}>
+      <video src={homePageVid} autoPlay loop muted style={videoStyle} />
+      <div style={contentStyle}>
+        <section style={openingPhraseStyle}>
           Your Story, Your Way
         </section>
 
@@ -174,8 +150,8 @@ const HomePage: React.FC = () => {
           </ul>
         </section>
 
-        <section style={styles.carouselContainer}>
-          <h2 style={{ textAlign: "left" }}>Meet Your Heroes</h2>
+        <section style={carouselContainerStyle}>
+          <h2 style={ subHeaderStyle }>Meet Your Heroes</h2>
           <div style={{ width: '50%', padding: "50px", margin: "0 auto" }}>
             <Slider {...settings}>
               {heroes.map((hero, index) => (
