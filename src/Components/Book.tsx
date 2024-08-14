@@ -29,13 +29,13 @@ const Book: React.FC = () => {
     }
   }, []);
 
-  const openBook = () => {
-    if (bookRef.current && prevBtnRef.current && nextBtnRef.current) {
-      bookRef.current.style.transform = "translateX(50%)";
-      prevBtnRef.current.style.transform = "translateX(-180px)";
-      nextBtnRef.current.style.transform = "translateX(180px)";
-    }
-  };
+//   const openBook = () => {
+//     if (bookRef.current && prevBtnRef.current && nextBtnRef.current) {
+//       bookRef.current.style.transform = "translateX(50%)";
+//       prevBtnRef.current.style.transform = "translateX(-180px)";
+//       nextBtnRef.current.style.transform = "translateX(180px)";
+//     }
+//   };
 
   const closeBook = (isAtBeginning: boolean) => {
     if (bookRef.current && prevBtnRef.current && nextBtnRef.current) {
