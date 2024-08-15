@@ -213,7 +213,7 @@ const CreateStory: React.FC = () => {
             style={ButtonStyle}
             onMouseEnter={handleNextButtonMouseEnter}
             onMouseLeave={handleNextButtonMouseLeave}
-            onClick={() => alert('Story submitted!')}
+            onClick={() => console.log(`${hero}`)}
           >
             Create Story
           </button>
