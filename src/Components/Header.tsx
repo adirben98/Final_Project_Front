@@ -120,7 +120,7 @@ export default function Header() {
             <li className="nav-item">
               <a
                 className="nav-link"
-                href="/addRecipe"
+                href="/create"
                 style={{ fontSize: "1.5rem" }}
               >
                 Create Book
