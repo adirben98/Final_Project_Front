@@ -1,100 +1,80 @@
-import React, { useState, useRef } from 'react';
-import './Book.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect, useRef } from "react";
+import "./Book.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowCircleLeft,
+  faArrowCircleRight,
+} from "@fortawesome/free-solid-svg-icons";
+import bookService, { IBook } from "../Services/bookService"; // Assuming you have the bookService in a file
+import { useParams } from "react-router-dom";
 
 const Book: React.FC = () => {
   const [currentLocation, setCurrentLocation] = useState<number>(1);
-  const numOfPapers = 3;
-  const maxLocation = numOfPapers + 1;
-
-  // Create refs for elements
+  const [book, setBook] = useState<IBook>(null!);
+  const [maxLocation, setMaxLocation] = useState<number>(0);
+  const { id } = useParams();
   const bookRef = useRef<HTMLDivElement>(null);
   const prevBtnRef = useRef<HTMLButtonElement>(null);
   const nextBtnRef = useRef<HTMLButtonElement>(null);
-  const paper1Ref = useRef<HTMLDivElement>(null);
-  const paper2Ref = useRef<HTMLDivElement>(null);
-  const paper3Ref = useRef<HTMLDivElement>(null);
+  const paperRefs = useRef<HTMLDivElement[]>([]);
+  const {getBook,cancelBook} = bookService.getBook(id!);
 
-  const openBook = () => {
-    if (bookRef.current && prevBtnRef.current && nextBtnRef.current) {
-      bookRef.current.style.transform = 'translateX(50%)';
-      prevBtnRef.current.style.transform = 'translateX(-180px)';
-      nextBtnRef.current.style.transform = 'translateX(180px)';
+  useEffect(() => {
+    getBook.then((fetchedBook) => {
+      setBook(fetchedBook.data);
+      setMaxLocation(fetchedBook.data.paragraphs.length + 1); // Adjust max location based on the number of paragraphs
+    });
+    return () => {
+        cancelBook();
     }
-  };
+  }, []);
+
+//   const openBook = () => {
+//     if (bookRef.current && prevBtnRef.current && nextBtnRef.current) {
+//       bookRef.current.style.transform = "translateX(50%)";
+//       prevBtnRef.current.style.transform = "translateX(-180px)";
+//       nextBtnRef.current.style.transform = "translateX(180px)";
+//     }
+//   };
 
   const closeBook = (isAtBeginning: boolean) => {
     if (bookRef.current && prevBtnRef.current && nextBtnRef.current) {
       if (isAtBeginning) {
-        bookRef.current.style.transform = 'translateX(0%)';
+        bookRef.current.style.transform = "translateX(0%)";
       } else {
-        bookRef.current.style.transform = 'translateX(100%)';
+        bookRef.current.style.transform = "translateX(100%)";
       }
-      prevBtnRef.current.style.transform = 'translateX(0px)';
-      nextBtnRef.current.style.transform = 'translateX(0px)';
+      prevBtnRef.current.style.transform = "translateX(0px)";
+      nextBtnRef.current.style.transform = "translateX(0px)";
     }
   };
 
   const goNextPage = () => {
     if (currentLocation < maxLocation) {
-      switch (currentLocation) {
-        case 1:
-          openBook();
-          if (paper1Ref.current) {
-            paper1Ref.current.classList.add('flipped');
-            paper1Ref.current.style.zIndex = '1';
-          }
-          break;
-        case 2:
-          if (paper2Ref.current) {
-            paper2Ref.current.classList.add('flipped');
-            paper2Ref.current.style.zIndex = '2';
-          }
-          break;
-        case 3:
-          if (paper3Ref.current) {
-            paper3Ref.current.classList.add('flipped');
-            paper3Ref.current.style.zIndex = '3';
-          }
-          closeBook(false);
-          break;
-        default:
-          throw new Error('unknown state');
+      if (paperRefs.current[currentLocation - 1]) {
+        paperRefs.current[currentLocation - 1].classList.add("flipped");
+        paperRefs.current[currentLocation - 1].style.zIndex =
+          String(currentLocation);
       }
+      if (currentLocation === maxLocation - 1) closeBook(false);
       setCurrentLocation(currentLocation + 1);
     }
   };
 
   const goPrevPage = () => {
     if (currentLocation > 1) {
-      switch (currentLocation) {
-        case 2:
-          closeBook(true);
-          if (paper1Ref.current) {
-            paper1Ref.current.classList.remove('flipped');
-            paper1Ref.current.style.zIndex = '3';
-          }
-          break;
-        case 3:
-          if (paper2Ref.current) {
-            paper2Ref.current.classList.remove('flipped');
-            paper2Ref.current.style.zIndex = '2';
-          }
-          break;
-        case 4:
-          openBook();
-          if (paper3Ref.current) {
-            paper3Ref.current.classList.remove('flipped');
-            paper3Ref.current.style.zIndex = '1';
-          }
-          break;
-        default:
-          throw new Error('unknown state');
+      if (paperRefs.current[currentLocation - 2]) {
+        paperRefs.current[currentLocation - 2].classList.remove("flipped");
+        paperRefs.current[currentLocation - 2].style.zIndex = String(
+          maxLocation - currentLocation + 1
+        );
       }
+      if (currentLocation === 2) closeBook(true);
       setCurrentLocation(currentLocation - 1);
     }
   };
+
+  if (!book) return null; // Show nothing until the book is loaded
 
   return (
     <div className="book-container">
@@ -102,55 +82,41 @@ const Book: React.FC = () => {
         id="prev-btn"
         ref={prevBtnRef}
         onClick={goPrevPage}
-        style={{ display: currentLocation === 1 ? 'none' : 'block' }}
+        style={{ display: currentLocation === 1 ? "none" : "block" }}
       >
         <FontAwesomeIcon icon={faArrowCircleLeft} size="2x" />
       </button>
 
       <div id="book" className="book" ref={bookRef}>
-        <div id="p1" className="paper" ref={paper1Ref}>
-          <div className="front">
-            <div id="f1" className="front-content">
-              <h1>Front 1</h1>
+        {book.paragraphs.map((paragraph, index) => (
+          <div
+            key={index}
+            className="paper"
+            ref={(el) => (paperRefs.current[index] = el as HTMLDivElement)}
+          >
+            <div className="front">
+              <div className="front-content">
+                <h1>{index === 0 ? book?.title : paragraph}</h1>
+                {index === 0 && <img src={book?.coverImg} alt="Cover" />}
+              </div>
+            </div>
+            <div className="back">
+              <div className="back-content">
+                <img
+                  src={book.images[index]}
+                  alt={`Image for paragraph ${index + 1}`}
+                />
+              </div>
             </div>
           </div>
-          <div className="back">
-            <div id="b1" className="back-content">
-              <h1>Back 1</h1>
-            </div>
-          </div>
-        </div>
-        <div id="p2" className="paper" ref={paper2Ref}>
-          <div className="front">
-            <div id="f2" className="front-content">
-              <h1>Front 2</h1>
-            </div>
-          </div>
-          <div className="back">
-            <div id="b2" className="back-content">
-              <h1>Back 2</h1>
-            </div>
-          </div>
-        </div>
-        <div id="p3" className="paper" ref={paper3Ref}>
-          <div className="front">
-            <div id="f3" className="front-content">
-              <h1>Front 3</h1>
-            </div>
-          </div>
-          <div className="back">
-            <div id="b3" className="back-content">
-              <h1>Back 3</h1>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
       <button
         id="next-btn"
         ref={nextBtnRef}
         onClick={goNextPage}
-        style={{ display: currentLocation === maxLocation ? 'none' : 'block' }}
+        style={{ display: currentLocation === maxLocation ? "none" : "block" }}
       >
         <FontAwesomeIcon icon={faArrowCircleRight} size="2x" />
       </button>

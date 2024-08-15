@@ -134,6 +134,7 @@ export default function BookReview() {
       </div>
     );
   }
+  if (!book)return
 
   return (
     <div

@@ -5,7 +5,7 @@ export { CanceledError };
 
 export const apiClient = axios.create({
   
-  baseURL: "http://localhost:3000",
+  baseURL: "https://193.106.55.140:80",
   headers: {Authorization : `Bearer ${localStorage.getItem("accessToken")}`},
 });
 
@@ -24,7 +24,7 @@ const useAuth = () => {
     if (accessToken) {
       try {
         await axios.post(
-          "http://localhost:3000/auth/checkToken",
+          "https://193.106.55.140:80/auth/checkToken",
           {},
           {
             headers: { Authorization: `Bearer ${accessToken}` },
@@ -41,7 +41,7 @@ const useAuth = () => {
           if (refreshToken) {
             try {
               const response = await axios.get(
-                "http://localhost:3000/auth/refresh",
+                "https://193.106.55.140:80/auth/refresh",
                 {
                   headers: { Authorization: `Bearer ${refreshToken}` },
                   signal: controller.signal,

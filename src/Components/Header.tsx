@@ -102,7 +102,7 @@ export default function Header() {
                   <a
                   key={hero.name}
                   className="dropdown-item"
-                  href={`/heroPage?q=${hero.name}&f=hero`}
+                  href={`/search?q=${hero.name}&f=hero`}
                 >
                   {hero.name}
                 </a>))}
