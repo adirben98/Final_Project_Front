@@ -37,7 +37,7 @@ export default function CreateStory() {
   const [step, setStep] = useState<number>(1); // Step state to manage page transition
   const { getHeroes, cancelHeroes } = heroService.getHeroes();
   const { isLoading } = useAuth();
-  const [hero , setHero] = useState<string>();
+  const [hero , setHero] = useState<string|null>();
 
   useEffect(() => {
     getHeroes
@@ -48,8 +48,15 @@ export default function CreateStory() {
   }, [isLoading, getHeroes, cancelHeroes]);
 
   const handleHeroClick = (heroName : string ,index: number) => {
-    setHero(heroName);
-    setSelectedHero(index);
+    if (selectedHero === index) {
+      // If the clicked hero is already selected, deselect it
+      setHero(null);
+      setSelectedHero(null);
+    } else {
+      // Otherwise, select the clicked hero
+      setHero(heroName);
+      setSelectedHero(index);
+    }
   };
 
   const handleNextStep = () => {
@@ -90,7 +97,7 @@ export default function CreateStory() {
     fontFamily: "'Lobster', cursive",
   };
 
-  const nextButtonStyle: React.CSSProperties = {
+  const ButtonStyle: React.CSSProperties = {
     display: selectedHero !== null ? 'block' : 'none',
     margin: '-50px auto',
     marginLeft: '700px',
@@ -101,7 +108,7 @@ export default function CreateStory() {
     color: '#fff',
     backgroundColor: 'lightblue',
     border: 'none',
-    borderRadius: '50%', // Make the button circular
+    borderRadius: '50%', 
     cursor: 'pointer',
     textAlign: 'center',
     lineHeight: '60px',
@@ -128,8 +135,12 @@ export default function CreateStory() {
     slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
-    nextArrow: <CustomArrow direction="right" />,
-    prevArrow: <CustomArrow direction="left" />,
+    nextArrow: <CustomArrow direction="right" className={''} style={{}} onClick={function (): void {
+      throw new Error('Function not implemented.');
+    } } />,
+    prevArrow: <CustomArrow direction="left" className={''} style={{}} onClick={function (): void {
+      throw new Error('Function not implemented.');
+    } } />,
     adaptiveHeight: true,
   };
 
@@ -163,7 +174,7 @@ export default function CreateStory() {
             )}
           </div>
           <button
-            style={nextButtonStyle}
+            style={ButtonStyle}
             onClick={handleNextStep}
             onMouseEnter={handleNextButtonMouseEnter}
             onMouseLeave={handleNextButtonMouseLeave}
@@ -191,18 +202,7 @@ export default function CreateStory() {
             }}
           />
           <button
-            style={{
-              padding: '50px 50px',
-              fontSize: '18px',
-              fontWeight: 'bold',
-              color: '#fff',
-              backgroundColor: 'lightblue',
-              border: 'none',
-              borderRadius: '25px',
-              cursor: 'pointer',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-              transition: 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease',
-            }}
+            style={ButtonStyle}
             onMouseEnter={handleNextButtonMouseEnter}
             onMouseLeave={handleNextButtonMouseLeave}
             onClick={() => alert('Story submitted!')} 

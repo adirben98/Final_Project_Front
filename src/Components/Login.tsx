@@ -46,7 +46,6 @@ export default function LoginForm() {
           alignItems: "center",
           height: "100vh",
           width: "100vw",
-        //   backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           padding: "20px",

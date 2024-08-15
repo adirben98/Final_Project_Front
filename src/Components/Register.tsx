@@ -220,14 +220,14 @@ export default function RegisterForm() {
             {errors.password && <span>{errors.password.message}</span>}
           </div>
           <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              marginTop: "25px",
-            }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "25px",
+              }}
           >
-            <button className="btn btn-primary" style={{ marginBottom: "10px" }}>
+            <button className="btn btn-primary" style={{ fontSize: "1rem", width: "100%", marginBottom: "15px" }}>
               Register
             </button>
             <GoogleLogin onSuccess={onSuccess} onError={onError} />
