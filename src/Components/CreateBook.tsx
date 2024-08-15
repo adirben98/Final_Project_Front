@@ -5,7 +5,14 @@ import 'slick-carousel/slick/slick-theme.css';
 import heroService, { IHero } from '../Services/heroService';
 import useAuth from '../Services/useAuth';
 
-const CustomArrow = ({ className, style, onClick, direction }: { className: string; style: React.CSSProperties; onClick: () => void; direction: 'left' | 'right' }) => (
+interface CustomArrowProps {
+  className: string;
+  style: React.CSSProperties;
+  onClick: () => void;
+  direction: 'left' | 'right';
+}
+
+const CustomArrow: React.FC<CustomArrowProps> = ({ className, style, onClick, direction }) => (
   <button
     className={className}
     style={{
@@ -31,13 +38,13 @@ const CustomArrow = ({ className, style, onClick, direction }: { className: stri
   </button>
 );
 
-export default function CreateStory() {
+const CreateStory: React.FC = () => {
   const [selectedHero, setSelectedHero] = useState<number | null>(null);
   const [heroes, setHeroes] = useState<IHero[]>([]);
   const [step, setStep] = useState<number>(1); // Step state to manage page transition
   const { getHeroes, cancelHeroes } = heroService.getHeroes();
   const { isLoading } = useAuth();
-  const [hero , setHero] = useState<string|null>();
+  const [hero, setHero] = useState<string | null>(null);
 
   useEffect(() => {
     getHeroes
@@ -47,7 +54,7 @@ export default function CreateStory() {
     return () => cancelHeroes();
   }, [isLoading, getHeroes, cancelHeroes]);
 
-  const handleHeroClick = (heroName : string ,index: number) => {
+  const handleHeroClick = (heroName: string, index: number) => {
     if (selectedHero === index) {
       // If the clicked hero is already selected, deselect it
       setHero(null);
@@ -75,6 +82,8 @@ export default function CreateStory() {
     objectFit: 'cover',
     margin: '0 auto',
     padding: '10px',
+    outline: 'none',  // Ensure the container doesn't show a focus outline
+    boxShadow: 'none', // Ensure the container doesn't have a box shadow
   };
 
   const heroImageStyle = (isSelected: boolean): React.CSSProperties => ({
@@ -86,7 +95,7 @@ export default function CreateStory() {
     padding: '10px',
     transition: 'transform 0.4s ease, box-shadow 0.4s ease',
     transform: isSelected ? 'scale(1.07)' : 'scale(0.8)',
-    borderRadius: '15px',
+    outline: '2px solid white', // Change outline to white
   });
 
   const heroNameStyle: React.CSSProperties = {
@@ -113,7 +122,6 @@ export default function CreateStory() {
     textAlign: 'center',
     lineHeight: '60px',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-    transition: 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease',
     outline: 'none',
   };
 
@@ -137,10 +145,10 @@ export default function CreateStory() {
     centerMode: true,
     nextArrow: <CustomArrow direction="right" className={''} style={{}} onClick={function (): void {
       throw new Error('Function not implemented.');
-    } } />,
+    }} />,
     prevArrow: <CustomArrow direction="left" className={''} style={{}} onClick={function (): void {
       throw new Error('Function not implemented.');
-    } } />,
+    }} />,
     adaptiveHeight: true,
   };
 
@@ -158,7 +166,7 @@ export default function CreateStory() {
                   <div
                     key={hero.name}
                     style={heroContainerStyle}
-                    onClick={() => handleHeroClick(hero.name,index)}
+                    onClick={() => handleHeroClick(hero.name, index)}
                   >
                     <img
                       src={hero.image}
@@ -205,7 +213,7 @@ export default function CreateStory() {
             style={ButtonStyle}
             onMouseEnter={handleNextButtonMouseEnter}
             onMouseLeave={handleNextButtonMouseLeave}
-            onClick={() => alert('Story submitted!')} 
+            onClick={() => alert('Story submitted!')}
           >
             Create Story
           </button>
@@ -214,3 +222,5 @@ export default function CreateStory() {
     </section>
   );
 }
+
+export default CreateStory;
