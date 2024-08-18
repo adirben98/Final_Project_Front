@@ -4,14 +4,14 @@ import fs from 'fs';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  server: {
-    host:'10.10.248.140',
-    https: {
-      key: fs.readFileSync("../client-key.pem"),
-      cert: fs.readFileSync("../client-cert.pem"),
+  plugins: [react()],  
+  // server: {
+  //   host:'10.10.248.140',
+  //   https: {
+  //     key: fs.readFileSync("../client-key.pem"),
+  //     cert: fs.readFileSync("../client-cert.pem"),
       
-    },
-    port: 443
-  }
+  //   },
+  //   port: 443
+  // }
 })

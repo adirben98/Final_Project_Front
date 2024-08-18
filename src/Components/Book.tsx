@@ -5,123 +5,174 @@ import {
   faArrowCircleLeft,
   faArrowCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
-import bookService, { IBook } from "../Services/bookService"; // Assuming you have the bookService in a file
+import bookService from "../Services/bookService";
 import { useParams } from "react-router-dom";
 
 const Book: React.FC = () => {
+  const [pages, setPages] = useState<string[]>([
+    "https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg",
+    "2",
+    "https://castfromclay.co.uk/wp-content/uploads/image-asset-1-1024x683.jpeg",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+  ]);
   const [currentLocation, setCurrentLocation] = useState<number>(1);
-  const [book, setBook] = useState<IBook>(null!);
-  const [maxLocation, setMaxLocation] = useState<number>(0);
+  const [maxLocation, setMaxLocation] = useState<number>(11);
   const { id } = useParams();
-  const bookRef = useRef<HTMLDivElement>(null);
+  const bookRef = useRef<HTMLDivElement | null>(null);
   const prevBtnRef = useRef<HTMLButtonElement>(null);
   const nextBtnRef = useRef<HTMLButtonElement>(null);
   const paperRefs = useRef<HTMLDivElement[]>([]);
-  const {getBook,cancelBook} = bookService.getBook(id!);
+  let counter = 0;
+  const { getBook, cancelBook } = bookService.getBook(id!);
+  
+
+  const openBook = () => {
+    bookRef.current!.style.transform = "translateX(50%)";
+    prevBtnRef.current!.style.transform = "translateX(-250%)";
+    nextBtnRef.current!.style.transform = "translateX(250%)";
+  };
+
+  const closeBook = (isAtBeginning: boolean) => {
+    if (isAtBeginning) {
+      bookRef.current!.style.transform = "translateX(0%)";
+    } else {
+      bookRef.current!.style.transform = "translateX(100%)";
+    }
+    prevBtnRef.current!.style.transform = "translateX(0%)";
+    nextBtnRef.current!.style.transform = "translateX(0%)";
+  };
+
+  const nextPage = () => {
+    if (currentLocation < maxLocation) {
+      switch (currentLocation) {
+        case 1:
+          openBook();
+          paperRefs.current[0].classList.add("flipped");
+          paperRefs.current[0].style.zIndex = "1";
+          break;
+        case maxLocation - 1:
+          paperRefs.current[maxLocation - 2].classList.add("flipped");
+          paperRefs.current[maxLocation - 2].style.zIndex = `${
+            maxLocation - 1
+          }`;
+          closeBook(false);
+          break;
+        default:
+          paperRefs.current[currentLocation - 1].classList.add("flipped");
+          paperRefs.current[
+            currentLocation - 1
+          ].style.zIndex = `${currentLocation}`;
+          break;
+      }
+      setCurrentLocation((prev) => prev + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentLocation > 1) {
+      switch (currentLocation) {
+        case 2:
+          closeBook(true);
+          paperRefs.current[0].classList.remove("flipped");
+          paperRefs.current[0].style.zIndex = `${maxLocation - 1}`;
+          break;
+        case maxLocation:
+          openBook();
+          paperRefs.current[maxLocation - 2].classList.remove("flipped");
+          paperRefs.current[maxLocation - 2].style.zIndex = `${1}`;
+          break;
+        default:
+          paperRefs.current[currentLocation - 2].classList.remove("flipped");
+          paperRefs.current[currentLocation - 2].style.zIndex = `${
+            maxLocation - currentLocation + 1
+          }`;
+          break;
+      }
+      setCurrentLocation((prev) => prev - 1);
+    }
+  };
 
   useEffect(() => {
     getBook.then((fetchedBook) => {
-      setBook(fetchedBook.data);
-      setMaxLocation(fetchedBook.data.paragraphs.length + 1); // Adjust max location based on the number of paragraphs
+      const arr=[fetchedBook.data.coverImg];
+
+      for (let i = 0; i < fetchedBook.data.paragraphs.length; i++) {
+        arr.push(fetchedBook.data.paragraphs[i]);
+        arr.push(fetchedBook.data.images[i]);
+      }
+      arr.push("The End")
+      setPages(arr)
+
+      setMaxLocation(fetchedBook.data.paragraphs.length+2); // Adjust max location based on the number of paragraphs
     });
     return () => {
         cancelBook();
     }
-  }, []);
-
-//   const openBook = () => {
-//     if (bookRef.current && prevBtnRef.current && nextBtnRef.current) {
-//       bookRef.current.style.transform = "translateX(50%)";
-//       prevBtnRef.current.style.transform = "translateX(-180px)";
-//       nextBtnRef.current.style.transform = "translateX(180px)";
-//     }
-//   };
-
-  const closeBook = (isAtBeginning: boolean) => {
-    if (bookRef.current && prevBtnRef.current && nextBtnRef.current) {
-      if (isAtBeginning) {
-        bookRef.current.style.transform = "translateX(0%)";
-      } else {
-        bookRef.current.style.transform = "translateX(100%)";
-      }
-      prevBtnRef.current.style.transform = "translateX(0px)";
-      nextBtnRef.current.style.transform = "translateX(0px)";
-    }
-  };
-
-  const goNextPage = () => {
-    if (currentLocation < maxLocation) {
-      if (paperRefs.current[currentLocation - 1]) {
-        paperRefs.current[currentLocation - 1].classList.add("flipped");
-        paperRefs.current[currentLocation - 1].style.zIndex =
-          String(currentLocation);
-      }
-      if (currentLocation === maxLocation - 1) closeBook(false);
-      setCurrentLocation(currentLocation + 1);
-    }
-  };
-
-  const goPrevPage = () => {
-    if (currentLocation > 1) {
-      if (paperRefs.current[currentLocation - 2]) {
-        paperRefs.current[currentLocation - 2].classList.remove("flipped");
-        paperRefs.current[currentLocation - 2].style.zIndex = String(
-          maxLocation - currentLocation + 1
-        );
-      }
-      if (currentLocation === 2) closeBook(true);
-      setCurrentLocation(currentLocation - 1);
-    }
-  };
-
-  if (!book) return null; // Show nothing until the book is loaded
-
+  }, [id]);
   return (
-    <div className="book-container">
-      <button
-        id="prev-btn"
-        ref={prevBtnRef}
-        onClick={goPrevPage}
-        style={{ display: currentLocation === 1 ? "none" : "block" }}
-      >
-        <FontAwesomeIcon icon={faArrowCircleLeft} size="2x" />
+    <div className="container">
+      <button onClick={prevPage} ref={prevBtnRef}>
+        <FontAwesomeIcon className="btn" icon={faArrowCircleLeft} />
       </button>
 
-      <div id="book" className="book" ref={bookRef}>
-        {book.paragraphs.map((paragraph, index) => (
-          <div
-            key={index}
-            className="paper"
-            ref={(el) => (paperRefs.current[index] = el as HTMLDivElement)}
-          >
-            <div className="front">
-              <div className="front-content">
-                <h1>{index === 0 ? book?.title : paragraph}</h1>
-                {index === 0 && <img src={book?.coverImg} alt="Cover" />}
-              </div>
-            </div>
-            <div className="back">
-              <div className="back-content">
-                <img
-                  src={book.images[index]}
-                  alt={`Image for paragraph ${index + 1}`}
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className="book" id="book" ref={bookRef}>
+        {pages.map((page, index) => {
+          // Only process even indices since we're handling pairs (front and back)
+          if (index % 2 === 0) {
+            const frontPage = page;
+            const backPage = pages[index + 1]; // Get the next page for the back
 
-      <button
-        id="next-btn"
-        ref={nextBtnRef}
-        onClick={goNextPage}
-        style={{ display: currentLocation === maxLocation ? "none" : "block" }}
-      >
-        <FontAwesomeIcon icon={faArrowCircleRight} size="2x" />
+            const paperDiv = (
+              <div
+                id={"p" + counter}
+                style={{ zIndex: maxLocation - counter }}
+                className="paper"
+                ref={(el) => paperRefs.current.push(el!)}
+              >
+                <div className="front">
+                  <div id={"f" + counter} className="front-content">
+                    <img
+                      src={frontPage}
+                      alt={`front-${counter}`}
+                      style={{ width: "200px", height: "150px" }}
+                    />
+                  </div>
+                </div>
+                <div className="back">
+                  <div id={"b" + counter} className="back-content">
+                    <h1>{backPage}</h1>
+                  </div>
+                </div>
+              </div>
+            );
+
+            counter++;
+            return paperDiv;
+          } else {
+            return null;
+          }
+        })}
+      </div>
+      <button onClick={nextPage} ref={nextBtnRef}>
+        <FontAwesomeIcon className="btn" icon={faArrowCircleRight} />
       </button>
     </div>
   );
 };
-
 export default Book;

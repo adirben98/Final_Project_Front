@@ -20,6 +20,9 @@ interface BooksAndFavorites {
 }
 
 class BookService {
+  generateBook(hero: string, prompt: string) {
+    return apiClient.post<string>("/book/generateBook", { hero, prompt });
+  }
   getAll() {
     const controller = new AbortController();
     const getBooks = apiClient.get<IBook[]>("/book", {
