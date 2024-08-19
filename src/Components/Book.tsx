@@ -1,174 +1,179 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Book.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowCircleLeft, faArrowCircleRight } from "@fortawesome/free-solid-svg-icons";
-import bookService, { IBook } from "../Services/bookService";
+import {
+  faArrowCircleLeft,
+  faArrowCircleRight,
+} from "@fortawesome/free-solid-svg-icons";
+import bookService from "../Services/bookService";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const Book: React.FC = () => {
-  const [currentLocation, setCurrentLocation] = useState<number>(0);
-  const [book, setBook] = useState<IBook | null>(null);
+  const [pages, setPages] = useState<string[]>([
+    "https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg",
+    "2",
+    "https://castfromclay.co.uk/wp-content/uploads/image-asset-1-1024x683.jpeg",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+  ]);
+  const [currentLocation, setCurrentLocation] = useState<number>(1);
+  const [maxLocation, setMaxLocation] = useState<number>(11);
   const { id } = useParams();
+  const bookRef = useRef<HTMLDivElement | null>(null);
+  const prevBtnRef = useRef<HTMLButtonElement>(null);
+  const nextBtnRef = useRef<HTMLButtonElement>(null);
   const paperRefs = useRef<HTMLDivElement[]>([]);
+  let counter = 0;
   const { getBook, cancelBook } = bookService.getBook(id!);
+  
+
+  const openBook = () => {
+    bookRef.current!.style.transform = "translateX(50%)";
+    prevBtnRef.current!.style.transform = "translateX(-250%)";
+    nextBtnRef.current!.style.transform = "translateX(250%)";
+  };
+
+  const closeBook = (isAtBeginning: boolean) => {
+    if (isAtBeginning) {
+      bookRef.current!.style.transform = "translateX(0%)";
+    } else {
+      bookRef.current!.style.transform = "translateX(100%)";
+    }
+    prevBtnRef.current!.style.transform = "translateX(0%)";
+    nextBtnRef.current!.style.transform = "translateX(0%)";
+  };
+
+  const nextPage = () => {
+    if (currentLocation < maxLocation) {
+      switch (currentLocation) {
+        case 1:
+          openBook();
+          paperRefs.current[0].classList.add("flipped");
+          paperRefs.current[0].style.zIndex = "1";
+          break;
+        case maxLocation - 1:
+          paperRefs.current[maxLocation - 2].classList.add("flipped");
+          paperRefs.current[maxLocation - 2].style.zIndex = `${
+            maxLocation - 1
+          }`;
+          closeBook(false);
+          break;
+        default:
+          paperRefs.current[currentLocation - 1].classList.add("flipped");
+          paperRefs.current[
+            currentLocation - 1
+          ].style.zIndex = `${currentLocation}`;
+          break;
+      }
+      setCurrentLocation((prev) => prev + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentLocation > 1) {
+      switch (currentLocation) {
+        case 2:
+          closeBook(true);
+          paperRefs.current[0].classList.remove("flipped");
+          paperRefs.current[0].style.zIndex = `${maxLocation - 1}`;
+          break;
+        case maxLocation:
+          openBook();
+          paperRefs.current[maxLocation - 2].classList.remove("flipped");
+          paperRefs.current[maxLocation - 2].style.zIndex = `${1}`;
+          break;
+        default:
+          paperRefs.current[currentLocation - 2].classList.remove("flipped");
+          paperRefs.current[currentLocation - 2].style.zIndex = `${
+            maxLocation - currentLocation + 1
+          }`;
+          break;
+      }
+      setCurrentLocation((prev) => prev - 1);
+    }
+  };
 
   useEffect(() => {
-    const fetchBookData = async () => {
-      try {
-        const fetchedBook = await getBook;
-        setBook(fetchedBook.data);
-      } catch (err) {
-        console.error("Error fetching book:", err);
+    getBook.then((fetchedBook) => {
+      const arr=[fetchedBook.data.coverImg];
+
+      for (let i = 0; i < fetchedBook.data.paragraphs.length; i++) {
+        arr.push(fetchedBook.data.paragraphs[i]);
+        arr.push(fetchedBook.data.images[i]);
       }
-    };
+      arr.push("The End")
+      setPages(arr)
 
-    fetchBookData();
-
+      setMaxLocation(fetchedBook.data.paragraphs.length+2); // Adjust max location based on the number of paragraphs
+    });
     return () => {
-      cancelBook();
-    };
-  }, [getBook, cancelBook]);
-
-  const generateImage = async (prompt: string): Promise<string> => {
-    try {
-      const response = await axios.post("/generatePhoto", { hero: localStorage.getItem("hero"), prompt });
-      return response.data;
-    } catch (err) {
-      console.error("Error generating image:", err);
-      return "";
+        cancelBook();
     }
-  };
-
-  const goNextPage = async () => {
-    if (currentLocation < book!.paragraphs.length + 1) {
-      if (!book!.images[currentLocation]) {
-        const newImage = await generateImage(book!.prompts[currentLocation]);
-        book!.images[currentLocation] = newImage;
-        setBook({ ...book! }); // Update the book state with the new image
-      }
-      if (paperRefs.current[currentLocation]) {
-        paperRefs.current[currentLocation].classList.add("flipped");
-        paperRefs.current[currentLocation].style.zIndex = String(currentLocation + 1);
-      }
-      setCurrentLocation(currentLocation + 1);
-    }
-  };
-
-  const goPrevPage = () => {
-    if (currentLocation > 0) {
-      if (paperRefs.current[currentLocation - 1]) {
-        paperRefs.current[currentLocation - 1].classList.remove("flipped");
-        paperRefs.current[currentLocation - 1].style.zIndex = String(book!.paragraphs.length - currentLocation + 1);
-      }
-      setCurrentLocation(currentLocation - 1);
-    }
-  };
-
-  const refreshImage = async () => {
-    if (currentLocation > 0) {
-      const updatedImage = await generateImage(book!.prompts[currentLocation - 1]);
-      book!.images[currentLocation - 1] = updatedImage;
-      setBook({ ...book! }); // Update state
-    }
-  };
-
-  const saveBook = async () => {
-    try {
-      await bookService.save({
-        title: book!.title,
-        author: "Idan the author",
-        authorImg: "https://cdn-icons-png.flaticon.com/512/1995/1995571.png",
-        images: book!.images,
-        paragraphs: book!.paragraphs,
-        description: book!.description,
-        coverImg: book!.coverImg,
-      });
-    } catch (err) {
-      console.error("Error saving book:", err);
-    }
-  };
-
-  if (!book) return null;
-
+  }, [id]);
   return (
-    <div className="book-container">
-      {currentLocation > 0 && (
-        <button
-          id="prev-btn"
-          onClick={goPrevPage}
-          className="nav-btn prev-btn"
-        >
-          <FontAwesomeIcon icon={faArrowCircleLeft} size="3x" />
-        </button>
-      )}
+    <div className="container">
+      <button onClick={prevPage} ref={prevBtnRef}>
+        <FontAwesomeIcon className="btn" icon={faArrowCircleLeft} />
+      </button>
 
-      <div id="book" className="book">
-        {/* Cover page */}
-        <div
-          className="paper first-page"
-          ref={(el) => (paperRefs.current[0] = el as HTMLDivElement)}
-        >
-          <div className="front">
-            <img src={book.coverImg} alt="Cover" className="cover-image" />
-          </div>
-          <div className="back">
-            <div className="page-content">
-              <div className="text-content">
-                <p>{book.paragraphs[0]}</p>
-              </div>
-              <div className="image-content">
-                <img src={book.images[0]} alt="Illustration" />
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="book" id="book" ref={bookRef}>
+        {pages.map((page, index) => {
+          // Only process even indices since we're handling pairs (front and back)
+          if (index % 2 === 0) {
+            const frontPage = page;
+            const backPage = pages[index + 1]; // Get the next page for the back
 
-        {/* Inner pages */}
-        {book.paragraphs.slice(1).map((paragraph, index) => (
-          <div
-            key={index + 1}
-            className="paper"
-            ref={(el) => (paperRefs.current[index + 1] = el as HTMLDivElement)}
-          >
-            <div className="front">
-              <div className="page-content">
-                <div className="text-content">
-                  <p>{paragraph}</p>
+            const paperDiv = (
+              <div
+                id={"p" + counter}
+                style={{ zIndex: maxLocation - counter }}
+                className="paper"
+                ref={(el) => paperRefs.current.push(el!)}
+              >
+                <div className="front">
+                  <div id={"f" + counter} className="front-content">
+                    <img
+                      src={frontPage}
+                      alt={`front-${counter}`}
+                      style={{ width: "200px", height: "150px" }}
+                    />
+                  </div>
                 </div>
-                <div className="image-content">
-                  <img src={book.images[index + 1]} alt={`Image for paragraph ${index + 1}`} />
+                <div className="back">
+                  <div id={"b" + counter} className="back-content">
+                    <h1>{backPage}</h1>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="back"></div>
-          </div>
-        ))}
+            );
 
-        {/* Finish page */}
-        <div
-          className="paper last-page"
-          ref={(el) => (paperRefs.current[book.paragraphs.length] = el as HTMLDivElement)}
-        >
-          <div className="front">
-            <div className="front-content">
-              <h2>Finish</h2>
-            </div>
-          </div>
-        </div>
+            counter++;
+            return paperDiv;
+          } else {
+            return null;
+          }
+        })}
       </div>
-
-      {currentLocation < book.paragraphs.length + 1 && (
-        <button
-          id="next-btn"
-          onClick={goNextPage}
-          className="nav-btn next-btn"
-        >
-          <FontAwesomeIcon icon={faArrowCircleRight} size="3x" />
-        </button>
-      )}
+      <button onClick={nextPage} ref={nextBtnRef}>
+        <FontAwesomeIcon className="btn" icon={faArrowCircleRight} />
+      </button>
     </div>
   );
 };
-
 export default Book;

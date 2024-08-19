@@ -270,7 +270,7 @@ export default function ProfilePage() {
                     style={{ flex: "1 1 calc(33.333% - 10px)" }}
                   >
                     <BookRow
-                      url={`/recipe/${book._id!}`}
+                      url={`/bookReview/${book._id!}`}
                       image={book.coverImg}
                       title={book.title}
                       description={book.description}
@@ -290,7 +290,7 @@ export default function ProfilePage() {
                     style={{ flex: "1 1 calc(33.333% - 10px)" }}
                   >
                     <BookRow
-                      url={`/book/${book._id!}`}
+                      url={`/bookReview/${book._id!}`}
                       image={book.coverImg}
                       title={book.title}
                       description={book.description}
