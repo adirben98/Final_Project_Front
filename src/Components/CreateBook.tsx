@@ -159,7 +159,7 @@ const CreateStory: React.FC = () => {
           <h2 style={{ textAlign: 'center', fontSize: '42px', marginBottom: '50px', color: '#333', letterSpacing: '1px', fontFamily: 'Arial, sans-serif' }}>
             Choose Your Heroes
           </h2>
-          <div style={{ width: '100%', margin: '0 auto' }}>
+          <div style={{ width: '600px', margin: '0 auto' }}>
             {heroes.length > 0 ? (
               <Slider {...settings}>
                 {heroes.map((hero, index) => (

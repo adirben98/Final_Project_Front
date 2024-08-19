@@ -12,6 +12,7 @@ export interface IBook {
   likes: number;
   likedBy: string[];
   createdAt: string;
+  prompts: string[];
 }
 
 interface BooksAndFavorites {
