@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import bookService from "../Services/bookService";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const Book: React.FC = () => {
   const [pages, setPages] = useState<string[]>([
