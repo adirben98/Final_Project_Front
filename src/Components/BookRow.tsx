@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 export interface bookRow {
   image: string;
   title: string;
-  description?: string;
+  
   url:string
 }
 
-export default function BookRow({ image, title, description, url }: bookRow) {
+export default function BookRow({ image, title, url }: bookRow) {
   return (
     <div className="card mb-4" style={{ height: '30vh', display: 'flex', flexDirection: 'column' }}>
       <Link to={url}>
@@ -17,7 +17,6 @@ export default function BookRow({ image, title, description, url }: bookRow) {
         <h5 className="card-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           <Link to={url} style={{ textDecoration: 'none', color: 'inherit' }}>{title}</Link>
         </h5>
-        <p className="card-text" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', padding: '1px' }}>{description}</p>
       </div>
     </div>
   );

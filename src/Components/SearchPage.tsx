@@ -19,7 +19,7 @@ export default function SearchPage() {
   useEffect(() => {
     if (!queryParam || !func) return;
     let funcCall;
-    if (func === "heroes") funcCall = bookService.searchByHero(queryParam);
+    if (func === "hero") funcCall = bookService.searchByHero(queryParam);
     else if (func === "books") funcCall = bookService.search(queryParam);
     else funcCall = userService.search(queryParam);
 
@@ -27,7 +27,7 @@ export default function SearchPage() {
 
     results
       .then((res) => {
-        if (func === "heroes" || func === "books") {
+        if (func === "hero" || func === "books") {
           setBookResults(res.data as IBook[]);
         } else {
           setUserSearch(res.data as IUser[]);
@@ -119,7 +119,7 @@ export default function SearchPage() {
                   <BookRow
                     image={book.coverImg}
                     title={book.title}
-                    description={book.description}
+                    
                     url={`/book/${book._id}`}
                   />
                 </div>
