@@ -131,7 +131,7 @@ const Book: React.FC = () => {
         <FontAwesomeIcon className="btn" icon={faArrowCircleLeft} />
       </button>
 
-      <div className="book" id="book" ref={bookRef}>
+      <div className="book" id="book" ref={bookRef} >
         {pages.map((page, index) => {
           // Only process even indices since we're handling pairs (front and back)
           if (index % 2 === 0) {

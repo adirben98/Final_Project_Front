@@ -135,7 +135,7 @@ export default function Header() {
             <li className="nav-item">
               <a
                 className="nav-link"
-                href={`/profile/${userService.getConnectedUser()!.username}`}
+                href={`/profile/${userService.getConnectedUser()?.username}`}
                 style={{ display: "flex", alignItems: "center" }}
               >
                 <img
