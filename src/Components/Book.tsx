@@ -119,7 +119,7 @@ const Book: React.FC = () => {
       arr.push("The End")
       setPages(arr)
 
-      setMaxLocation(fetchedBook.data.paragraphs.length+2); // Adjust max location based on the number of paragraphs
+      setMaxLocation(fetchedBook.data.paragraphs.length+2); 
     });
     return () => {
         cancelBook();
@@ -133,10 +133,9 @@ const Book: React.FC = () => {
 
       <div className="book" id="book" ref={bookRef} >
         {pages.map((page, index) => {
-          // Only process even indices since we're handling pairs (front and back)
           if (index % 2 === 0) {
             const frontPage = page;
-            const backPage = pages[index + 1]; // Get the next page for the back
+            const backPage = pages[index + 1]; 
 
             const paperDiv = (
               <div
@@ -150,13 +149,15 @@ const Book: React.FC = () => {
                     <img
                       src={frontPage}
                       alt={`front-${counter}`}
-                      style={{ width: "200px", height: "150px" }}
+                      style={{ width: "300px", height: "300px" }}
                     />
                   </div>
                 </div>
                 <div className="back">
                   <div id={"b" + counter} className="back-content">
-                    <h1>{backPage}</h1>
+                    {index+1 === pages.length - 1 ? 
+                      <h1>{backPage}</h1>:
+                    <p className="page-style">{backPage}</p>}
                   </div>
                 </div>
               </div>
