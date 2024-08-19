@@ -73,7 +73,7 @@ class BookService {
   }
   searchByHero(name: string) {
     const controller = new AbortController();
-    const results = apiClient.get<IBook>("/book/searchByHero/" + name, {
+    const results = apiClient.get<IBook[]>("/book/searchByHero/" + name, {
       signal: controller.signal,
     });
     return { results, cancelSearch: () => controller.abort() };
