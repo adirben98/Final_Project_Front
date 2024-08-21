@@ -102,3 +102,26 @@ button .btn {
   page-break-inside: avoid;
   box-sizing: border-box;
 }
+.scrollable-paragraph {
+  width: 80%; /* Adjust the width as needed */
+  max-width: 800px;
+  max-height: 500px; /* Set a maximum height for the scrolling area */
+  margin: 20px auto; /* Center the paragraph horizontally */
+  padding: 20px;
+  border: 1px solid #ccc; /* Light border to simulate a textarea */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  background-color: #fff; /* White background to mimic paper */
+  font-family: 'Times New Roman', Times, serif; /* Optional: font for a more traditional look */
+  line-height: 1.6; /* Better readability */
+  border-radius: 5px; /* Slightly rounded corners */
+  overflow-y: hidden; /* Hide the scrollbar by default */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  white-space: pre-wrap; /* Preserve whitespace and wrap text as in a textarea */
+  transition: overflow-y 0.3s ease; /* Smooth transition for scrollbar appearance */
+}
+
+/* Show scrollbar on hover */
+.scrollable-paragraph:hover {
+  overflow-y: auto; /* Show vertical scrollbar when hovering */
+}
+

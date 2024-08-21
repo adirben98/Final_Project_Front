@@ -1,4 +1,4 @@
-import {apiClient} from "./useAuth";
+import {apiClient} from "../Hooks/useAuth";
 interface IPhoto{
     url:string
 }

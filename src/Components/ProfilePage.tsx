@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import useAuth, { CanceledError } from "../Services/useAuth";
+import useAuth, { CanceledError } from "../Hooks/useAuth";
 import BookRow from './BookRow'
 import ChangePassword from "./ChangePassword";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

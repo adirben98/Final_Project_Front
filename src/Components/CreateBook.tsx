@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import heroService, { IHero } from "../Services/heroService";
-import useAuth from "../Services/useAuth";
+import useAuth from "../Hooks/useAuth";
 import bookService from "../Services/bookService";
 
 interface CustomArrowProps {
@@ -53,7 +53,7 @@ const CreateStory: React.FC = () => {
   const [hero, setHero] = useState<string | null>(null);
   const [prompt, setPrompt] = useState<string | null>(null);
   const [loading, setIsLoading] = useState<boolean>(false);
-
+  const modalRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     getHeroes
       .then((response) => setHeroes(response.data))
@@ -83,11 +83,21 @@ const CreateStory: React.FC = () => {
     bookService
       .generateBook(hero!, prompt!)
       .then((res) => {
-        console.log(res);
-        window.location.href = `/book/${res.data}`;
+        if (res.status !== 200) {
+          modalRef.current?.showModal();
+          console.log("Error generating book:", res.status);
+          console.error("Error generating book:", res);
+        } else {
+          console.log(res.data);
+          window.location.href = `/book/${res.data}`;
+        }
       })
       .catch((error) => {
-        console.log(error);
+        
+          modalRef.current?.showModal();
+          console.error("Error generating book:",error);
+          
+        
       })
       .finally(() => {
         setIsLoading(false);
@@ -225,6 +235,48 @@ const CreateStory: React.FC = () => {
 
   return (
     <div>
+      <dialog
+                data-modal
+                ref={modalRef}
+                style={{
+                    width: '300px',
+                    padding: '20px',
+                    border: 'none',
+                    borderRadius: '8px',
+                    backgroundColor: '#fff',
+                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+                    textAlign: 'center',
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
+            >
+                <p style={{ marginBottom: '15px', color: '#333', fontFamily: 'Arial, sans-serif', lineHeight: '1.5' }}>
+                    It seems that your prompt might have been violating our content policy!
+                </p>
+                <p style={{ marginBottom: '15px', color: '#333', fontFamily: 'Arial, sans-serif', lineHeight: '1.5' }}>
+                    Please try again with another prompt.
+                </p>
+                <button
+                    className="close-button"
+                    onClick={() => modalRef.current?.close()}
+                    style={{
+                        padding: '10px 20px',
+                        backgroundColor: '#007bff',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                    }}
+                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#0056b3')}
+                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#007bff')}
+                >
+                    Close
+                </button>
+            </dialog>
       <style>{spinKeyframes}</style>
       <section style={carouselContainerStyle}>
         {step === 1 && (

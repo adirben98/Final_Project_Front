@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import heroService, { IHero } from "../Services/heroService";
-import useAuth from "../Services/useAuth";
+import useAuth from "../Hooks/useAuth";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight } from "react-feather";
 import { FaBook } from "react-icons/fa";
 import homePageVid from "../assets/homePageVid.mp4";
 import { Link } from "react-router-dom";
-import useOnScreen from "./Hooks/useOnScreen";
+import useOnScreen from "../Hooks/useOnScreen";
 
 const HomePage: React.FC = () => {
   const topBooks: string[] = ["Book 1", "Book 2", "Book 3", "Book 4", "Book 5"];

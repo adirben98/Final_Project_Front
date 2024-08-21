@@ -1,7 +1,7 @@
 import React, { useEffect, useState, CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
-import useAuth from "../Services/useAuth";
+import useAuth from "../Hooks/useAuth";
 import bookifyLogo from "../assets/bookifyLogo.png"; // Replace with your logo
 import avatar from "../assets/avatar.png"; // Replace with your avatar
 import userService from "../Services/userService";

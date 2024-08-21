@@ -1,4 +1,4 @@
-import { apiClient } from "./useAuth";
+import { apiClient } from "../Hooks/useAuth.ts";
 import { IUser } from "./authService.ts";
 
 class userService {

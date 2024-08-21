@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import useAuth, { CanceledError } from "../Services/useAuth";
+import useAuth, { CanceledError } from "../Hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faThumbsUp,
@@ -87,9 +87,11 @@ export default function BookReview() {
   }, [id, isLoading, renderNeeded]);
 
   async function likeClick() {
+    let isAuthor=false
+    if(userService.getConnectedUser()!.username === book.author )isAuthor=true
     if (!like) {
       bookService
-        .like(id!)
+        .like(id!,isAuthor)
         .then(() => {
           setBook((prevBook) => ({
             ...prevBook,
@@ -102,7 +104,7 @@ export default function BookReview() {
         });
     } else {
       bookService
-        .unlike(id!)
+        .unlike(id!,isAuthor)
         .then(() => {
           setBook((prevBook) => ({
             ...prevBook,
@@ -236,7 +238,7 @@ export default function BookReview() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          {userService.getConnectedUser()!.username !== book.author && (
+          {(
             <button
               type="button"
               className="btn"

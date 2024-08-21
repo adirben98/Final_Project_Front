@@ -7,6 +7,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import bookService from "../Services/bookService";
 import { useParams } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
+
 
 const Book: React.FC = () => {
   const [pages, setPages] = useState<string[]>([
@@ -40,6 +42,8 @@ const Book: React.FC = () => {
   const paperRefs = useRef<HTMLDivElement[]>([]);
   let counter = 0;
   const { getBook, cancelBook } = bookService.getBook(id!);
+  const { isLoading} = useAuth();
+  
   
 
   const openBook = () => {
@@ -90,7 +94,7 @@ const Book: React.FC = () => {
         case 2:
           closeBook(true);
           paperRefs.current[0].classList.remove("flipped");
-          paperRefs.current[0].style.zIndex = `${maxLocation - 1}`;
+          paperRefs.current[0].style.zIndex = `${maxLocation}`;
           break;
         case maxLocation:
           openBook();
@@ -100,7 +104,7 @@ const Book: React.FC = () => {
         default:
           paperRefs.current[currentLocation - 2].classList.remove("flipped");
           paperRefs.current[currentLocation - 2].style.zIndex = `${
-            maxLocation - currentLocation + 1
+            maxLocation - currentLocation +2
           }`;
           break;
       }
@@ -124,9 +128,10 @@ const Book: React.FC = () => {
     return () => {
         cancelBook();
     }
-  }, [id]);
+  }, [id,isLoading]);
   return (
     <div className="container">
+    
       <button onClick={prevPage} ref={prevBtnRef}>
         <FontAwesomeIcon className="btn" icon={faArrowCircleLeft} />
       </button>
@@ -157,7 +162,7 @@ const Book: React.FC = () => {
                   <div id={"b" + counter} className="back-content">
                     {index+1 === pages.length - 1 ? 
                       <h1>{backPage}</h1>:
-                    <p className="page-style">{backPage}</p>}
+                    <p className="scrollable-paragraph">{backPage}</p>}
                   </div>
                 </div>
               </div>

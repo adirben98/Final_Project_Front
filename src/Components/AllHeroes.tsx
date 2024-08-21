@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useAuth from '../Services/useAuth';
+import useAuth from '../Hooks/useAuth';
 import heroService, { IHero } from '../Services/heroService';
 
 export default function AllHeroes() {

@@ -1,5 +1,5 @@
 import { CredentialResponse } from "@react-oauth/google";
-import {apiClient} from "./useAuth";
+import {apiClient} from "../Hooks/useAuth";
 import avatar from "../assets/avatar.png";
 
 

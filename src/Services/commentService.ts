@@ -1,5 +1,5 @@
 import { IComment } from "../Components/Comment";
-import {apiClient} from "./useAuth";
+import {apiClient} from "../Hooks/useAuth";
 
 class commentService{
     getComments(id: string){

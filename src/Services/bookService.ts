@@ -1,4 +1,4 @@
-import { apiClient } from "./useAuth";
+import { apiClient } from "../Hooks/useAuth";
 
 export interface IBook {
   _id?: string;
@@ -56,12 +56,12 @@ class BookService {
     return { isLiked, cancelIsLiked: () => controller.abort() };
   }
 
-  like(id: string) {
-    return apiClient.put(`/book/like/${id}`);
+  like(id: string, isAuthor: boolean) {
+    return apiClient.put(`/book/like/${id}`, { isAuthor });
   }
 
-  unlike(id: string) {
-    return apiClient.put(`/book/unlike/${id}`);
+  unlike(id: string, isAuthor: boolean) {
+    return apiClient.put(`/book/unlike/${id}`, { isAuthor });
   }
 
   search(query: string) {

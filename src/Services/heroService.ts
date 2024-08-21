@@ -1,4 +1,4 @@
-import { apiClient } from "./useAuth";
+import { apiClient } from "../Hooks/useAuth";
 export interface IHero {
   name: string;
   image: string;
