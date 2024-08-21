@@ -66,7 +66,6 @@ export default function AllBooks() {
             <BookRow
               image={book.coverImg}
               url={`/bookReview/${book._id}`}
-              description={book.description}
               title={book.title}
             />
           </li>

@@ -1,9 +1,9 @@
-import React, { useEffect, useState, CSSProperties } from "react";
+import  { useEffect, useState, CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import useAuth from "../Hooks/useAuth";
-import bookifyLogo from "../assets/bookifyLogo.png"; // Replace with your logo
-import avatar from "../assets/avatar.png"; // Replace with your avatar
+import bookifyLogo from "../assets/bookifyLogo.png"; 
+import avatar from "../assets/avatar.png"; 
 import userService from "../Services/userService";
 import heroService, { IHero } from "../Services/heroService";
 

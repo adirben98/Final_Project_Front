@@ -273,7 +273,6 @@ export default function ProfilePage() {
                       url={`/bookReview/${book._id!}`}
                       image={book.coverImg}
                       title={book.title}
-                      description={book.description}
                     />
                   </div>
                 ))}
@@ -293,7 +292,6 @@ export default function ProfilePage() {
                       url={`/bookReview/${book._id!}`}
                       image={book.coverImg}
                       title={book.title}
-                      description={book.description}
                     />
                   </div>
                 ))}
