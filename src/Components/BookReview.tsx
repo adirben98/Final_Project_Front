@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import useAuth, { CanceledError } from "../Hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBook,
   faThumbsUp,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +35,10 @@ export default function BookReview() {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  function enterBook(){
+    window.location.href = `/book/${id}`;
   }
 
   useEffect(() => {
@@ -184,6 +189,16 @@ export default function BookReview() {
               style={{ marginRight: "10px" }}
             >
               <FontAwesomeIcon icon={faTrash} className="fa-xl tinted-icon" />
+            </button>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                enterBook();
+              }}
+              style={{ marginRight: "10px" }}
+            >
+              <FontAwesomeIcon icon={faBook} className="fa-xl tinted-icon" />
             </button>
           </div>
         )}

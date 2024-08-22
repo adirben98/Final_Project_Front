@@ -47,13 +47,18 @@ const CustomArrow: React.FC<CustomArrowProps> = ({
 const CreateStory: React.FC = () => {
   const [selectedHero, setSelectedHero] = useState<number | null>(null);
   const [heroes, setHeroes] = useState<IHero[]>([]);
-  const [step, setStep] = useState<number>(1); // Step state to manage page transition
+  const [step, setStep] = useState<number>(1);
   const { getHeroes, cancelHeroes } = heroService.getHeroes();
   const { isLoading } = useAuth();
   const [hero, setHero] = useState<string | null>(null);
   const [prompt, setPrompt] = useState<string | null>(null);
   const [loading, setIsLoading] = useState<boolean>(false);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const [text, setText] = useState<string>("");
+  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
+    useState<boolean>(false);
+  const [warningMessage, setWarningMessage] = useState<string>("");
+
   useEffect(() => {
     getHeroes
       .then((response) => setHeroes(response.data))
@@ -64,11 +69,9 @@ const CreateStory: React.FC = () => {
 
   const handleHeroClick = (heroName: string, index: number) => {
     if (selectedHero === index) {
-      // If the clicked hero is already selected, deselect it
       setHero(null);
       setSelectedHero(null);
     } else {
-      // Otherwise, select the clicked hero
       setHero(heroName);
       setSelectedHero(index);
     }
@@ -79,6 +82,7 @@ const CreateStory: React.FC = () => {
   };
 
   const generateStory = async () => {
+    if (!hero || !prompt) return;
     setIsLoading(true);
     bookService
       .generateBook(hero!, prompt!)
@@ -93,15 +97,33 @@ const CreateStory: React.FC = () => {
         }
       })
       .catch((error) => {
-        
-          modalRef.current?.showModal();
-          console.error("Error generating book:",error);
-          
-        
+        setText(
+          "It seems that your prompt might have been violating our content policy!\n Please try again with another prompt."
+        );
+        modalRef.current?.showModal();
+        console.error("Error generating book:", error);
       })
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  const handleCreateStoryClick = () => {
+    if (!prompt) {
+      setWarningMessage("Please enter your book idea before creating the story.");
+    } else {
+      setWarningMessage(""); // Clear the warning message if prompt is provided
+      setIsConfirmationDialogOpen(true); // Open the confirmation dialog
+    }
+  };
+
+  const handleDialogClose = () => {
+    setIsConfirmationDialogOpen(false); // Close the confirmation dialog
+  };
+
+  const handleConfirmCreateStory = () => {
+    setIsConfirmationDialogOpen(false);
+    generateStory(); // Call the function to generate the story
   };
 
   const loaderOverlayStyle: React.CSSProperties = {
@@ -110,11 +132,11 @@ const CreateStory: React.FC = () => {
     left: 0,
     width: "100%",
     height: "100%",
-    background: "rgba(0, 0, 0, 0.5)", // Dimmed background
+    background: "rgba(0, 0, 0, 0.5)",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1000, // Ensure it is on top of other content
+    zIndex: 1000,
   };
 
   const loaderStyle: React.CSSProperties = {
@@ -145,8 +167,8 @@ const CreateStory: React.FC = () => {
     objectFit: "cover",
     margin: "0 auto",
     padding: "10px",
-    outline: "none", // Ensure the container doesn't show a focus outline
-    boxShadow: "none", // Ensure the container doesn't have a box shadow
+    outline: "none",
+    boxShadow: "none",
   };
 
   const heroImageStyle = (isSelected: boolean): React.CSSProperties => ({
@@ -158,7 +180,7 @@ const CreateStory: React.FC = () => {
     padding: "10px",
     transition: "transform 0.4s ease, box-shadow 0.4s ease",
     transform: isSelected ? "scale(1.07)" : "scale(0.8)",
-    outline: "2px solid white", // Change outline to white
+    outline: "2px solid white",
   });
 
   const heroNameStyle: React.CSSProperties = {
@@ -236,47 +258,121 @@ const CreateStory: React.FC = () => {
   return (
     <div>
       <dialog
-                data-modal
-                ref={modalRef}
-                style={{
-                    width: '300px',
-                    padding: '20px',
-                    border: 'none',
-                    borderRadius: '8px',
-                    backgroundColor: '#fff',
-                    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-                    textAlign: 'center',
-                    position: 'fixed',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
+        data-modal
+        ref={modalRef}
+        style={{
+          width: "300px",
+          padding: "20px",
+          border: "none",
+          borderRadius: "8px",
+          backgroundColor: "#fff",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+          textAlign: "center",
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <p
+          style={{
+            marginBottom: "15px",
+            color: "#333",
+            fontFamily: "Arial, sans-serif",
+            lineHeight: "1.5",
+          }}
+        >
+          {text}
+        </p>
+        <button
+          className="close-button"
+          onClick={() => modalRef.current?.close()}
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "14px",
+            fontWeight: "bold",
+          }}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.backgroundColor = "#0056b3")
+          }
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor = "#007bff")
+          }
+        >
+          Close
+        </button>
+      </dialog>
+
+      {/* New Confirmation Dialog */}
+      {isConfirmationDialogOpen && (
+        <dialog
+          open
+          style={{
+            width: "300px",
+            padding: "20px",
+            border: "none",
+            borderRadius: "8px",
+            backgroundColor: "#fff",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 1001,
+          }}
+        >
+          <p
+            style={{
+              marginBottom: "20px",
+              fontSize: "18px",
+              color: "#333",
+              fontFamily: "Arial, sans-serif",
+            }}
+          >
+            Are you ready to create your original story?
+          </p>
+          <div>
+            <button
+              onClick={handleConfirmCreateStory}
+              style={{
+                padding: "10px 20px",
+                marginRight: "10px",
+                backgroundColor: "#28a745",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
             >
-                <p style={{ marginBottom: '15px', color: '#333', fontFamily: 'Arial, sans-serif', lineHeight: '1.5' }}>
-                    It seems that your prompt might have been violating our content policy!
-                </p>
-                <p style={{ marginBottom: '15px', color: '#333', fontFamily: 'Arial, sans-serif', lineHeight: '1.5' }}>
-                    Please try again with another prompt.
-                </p>
-                <button
-                    className="close-button"
-                    onClick={() => modalRef.current?.close()}
-                    style={{
-                        padding: '10px 20px',
-                        backgroundColor: '#007bff',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        fontSize: '14px',
-                        fontWeight: 'bold',
-                    }}
-                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#0056b3')}
-                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#007bff')}
-                >
-                    Close
-                </button>
-            </dialog>
+              Yes, create me
+            </button>
+            <button
+              onClick={handleDialogClose}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#dc3545",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Not yet
+            </button>
+          </div>
+        </dialog>
+      )}
+
       <style>{spinKeyframes}</style>
       <section style={carouselContainerStyle}>
         {step === 1 && (
@@ -354,18 +450,53 @@ const CreateStory: React.FC = () => {
                 resize: "none",
               }}
             />
+            {warningMessage && (
+              <p style={{ color: "red", marginBottom: "70px" }}>
+                {warningMessage}
+              </p>
+            )}
             {loading && (
               <div style={loaderOverlayStyle}>
                 <div style={loaderStyle}></div>
               </div>
             )}
             <button
-              style={ButtonStyle}
+              style={{
+                ...ButtonStyle,
+                backgroundColor: "lightblue",
+                marginLeft: "390px",
+              }}
               onMouseEnter={handleNextButtonMouseEnter}
               onMouseLeave={handleNextButtonMouseLeave}
-              onClick={generateStory}
+              onClick={handleCreateStoryClick} // Check and open the confirmation dialog
             >
               Create Story
+            </button>
+
+            <button
+              style={{
+                display: selectedHero !== null ? "block" : "none",
+                width: "60px",
+                marginLeft: "20px",
+                height: "60px",
+                fontSize: "18px",
+                fontWeight: "bold",
+                color: "#fff",
+                backgroundColor: "lightblue",
+                border: "none",
+                borderRadius: "50%",
+                cursor: "pointer",
+                textAlign: "center",
+                lineHeight: "60px",
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+                outline: "none",
+                marginTop: "-60px",
+              }}
+              onMouseEnter={handleNextButtonMouseEnter}
+              onMouseLeave={handleNextButtonMouseLeave}
+              onClick={() => setStep(step - 1)}
+            >
+              Back
             </button>
           </div>
         )}
