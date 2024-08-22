@@ -169,7 +169,7 @@ export default function SearchPage() {
                     <BookRow
                       image={book.coverImg}
                       title={book.title}
-                      url={`/book/${book._id}`}
+                      url={`/bookReview/${book._id}`}
                     />
                   </div>
                 ))}
