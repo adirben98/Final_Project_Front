@@ -11,14 +11,18 @@ import { FaBook } from "react-icons/fa";
 import homePageVid from "../assets/homePageVid.mp4";
 import { Link } from "react-router-dom";
 import useOnScreen from "../Hooks/useOnScreen";
+import bookService,{ IBook } from "../Services/bookService";
+import BookRow from "./BookRow";
 
 const HomePage: React.FC = () => {
-  const topBooks: string[] = ["Book 1", "Book 2", "Book 3", "Book 4", "Book 5"];
   const latestBooks: string[] = [
     "Latest Book 1",
     "Latest Book 2",
     "Latest Book 3",
   ];
+
+  const [topBooks, setTopBooks] = useState<IBook[]>([]);
+  const { getTopBooks, cancelGetTopBooks } = bookService.getTopBooks();
 
   const ref1 = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
@@ -178,8 +182,12 @@ const HomePage: React.FC = () => {
     getHeroes.then((response) => {
       setHeroes(response.data);
     });
+    getTopBooks.then((response) => {
+      setTopBooks(response.data);
+    })
     return () => {
       cancelHeroes();
+      cancelGetTopBooks()
     };
   }, [isLoading]);
 
@@ -217,18 +225,23 @@ const HomePage: React.FC = () => {
         <section style={{ marginBottom: "30px", width: "100%" }}>
           <h2 style={subHeaderStyle}>Top 5 Books of the Week</h2>
           <ul>
-            {topBooks.map((book, index) => (
-              <li
-                key={index}
-                style={{
-                  fontSize: "1.2em", // Smaller font size
-                  color: "#ff69b4",
-                  marginBottom: "10px",
-                  fontFamily: "'Comic Sans MS', cursive",
-                }}
-              >
-                {book}
-              </li>
+            {topBooks.map((book) => (
+             <li
+             key={book._id}
+             style={{
+               flex: "1 1 calc(33.333% - 15px)",
+               boxSizing: "border-box",
+               minWidth: "10px", 
+               display: "flex",
+               flexDirection: "column",
+             }}
+           >
+             <BookRow
+               image={book.coverImg}
+               url={`/bookReview/${book._id}`}
+               title={book.title}
+             />
+           </li>
             ))}
           </ul>
         </section>

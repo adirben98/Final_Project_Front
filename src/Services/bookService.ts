@@ -89,5 +89,12 @@ class BookService {
     const generateImage= apiClient.post<string>(`/book/generateImage/${id}`,{prompt,index,hero},{signal:controller.signal})
     return {generateImage, cancelGenerateImage: () => controller.abort()}
   }
+  getTopBooks() {
+    const controller = new AbortController();
+    const getTopBooks = apiClient.get<IBook[]>("/book/getTopBooks", {
+      signal: controller.signal,
+    });
+    return { getTopBooks, cancelGetTopBooks: () => controller.abort() };
+  }
 }
 export default new BookService();
