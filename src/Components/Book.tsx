@@ -95,12 +95,15 @@ const Book: React.FC = () => {
 
   const refreshPhoto = async () => {
     const index = currentLocation - 1;
+    let prompt =""
+    if(index-1>=0)
+      prompt=prompts[index-1];
 
     setClickedBtns((prev) =>
       prev.map((clicked, i) => (i === index ? true : clicked))
     );
     bookService
-      .generateImage(prompts[index - 1], index - 1, id!, hero)
+      .generateImage(prompt, index - 1, id!, hero)
       .generateImage.then((res) => {
         const newImg = res.data;
         const newPages = [...pages];
@@ -142,7 +145,7 @@ const Book: React.FC = () => {
 
         if (isMounted) {
           setPages(arr);
-          setPrompts(["cover", ...fetchedBook.data.prompts]);
+          setPrompts([...fetchedBook.data.prompts]);
           setHero(fetchedBook.data.hero);
           setMaxLocation(fetchedBook.data.paragraphs.length + 2);
           setClickedBtns(
@@ -180,6 +183,11 @@ const Book: React.FC = () => {
               }
             }
           }
+        }
+        else{
+          setClickedBtns(
+            new Array(fetchedBook.data.paragraphs.length + 1).fill(false)
+          );
         }
       } catch (error) {
         console.error("Failed to fetch book:", error);
