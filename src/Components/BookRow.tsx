@@ -10,16 +10,12 @@ export default function BookRow({ image, title, url }: BookRowProps) {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        margin: "20px",
         backgroundColor: "#fff",
         borderRadius: "12px",
         boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
         overflow: "hidden",
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
-        width: "calc(25% - 40px)", // 4 items per row
+        cursor: "pointer",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "scale(1.05)";
@@ -37,7 +33,7 @@ export default function BookRow({ image, title, url }: BookRowProps) {
           style={{
             width: "100%",
             height: "200px", // Fixed height for consistency
-            objectFit: "fill", // Fill the container without distortion
+            objectFit: "cover", // Maintain aspect ratio, cover the container
             transition: "transform 0.3s ease, opacity 0.3s ease",
           }}
         />

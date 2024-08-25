@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth, { CanceledError } from "../Hooks/useAuth";
-import BookRow from './BookRow'
 import ChangePassword from "./ChangePassword";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
@@ -9,10 +8,11 @@ import uploadPhoto from "../Services/fileService";
 import { IUser } from "../Services/authService";
 import avatar from "../assets/avatar.png";
 import userService from "../Services/userService";
-import bookService,{IBook} from "../Services/bookService";
+import bookService, { IBook } from "../Services/bookService";
+import BookRow from "./BookRow";
 
 export default function ProfilePage() {
-  const [activeTab, setActiveTab] = useState<string>("myRecipes");
+  const [activeTab, setActiveTab] = useState<string>("myBooks");
   const [loading, setLoading] = useState<boolean>(true);
   const [image, setImage] = useState<string>(avatar);
   const [user, setUser] = useState<IUser>({
@@ -31,7 +31,6 @@ export default function ProfilePage() {
   const photoGalleryRef = useRef<HTMLInputElement>(null);
   const { isLoading } = useAuth();
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
-
 
   async function uploadCurrentPhoto(photo: File) {
     const url = await uploadPhoto(photo);
@@ -113,204 +112,193 @@ export default function ProfilePage() {
     );
   }
 
-  
-
-  
-
-  
-
   return (
     <div
       className="profile-page-container"
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      style={{
+        maxWidth: "935px",
+        margin: "0 auto",
+        padding: "20px",
+        fontFamily: "'Helvetica Neue', sans-serif",
+      }}
     >
+      {/* Profile Header */}
       <div
-        className="profile-container"
-        style={{ width: "100%", maxWidth: "1000px" }}
+        className="profile-header"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "40px",
+        }}
       >
-        <div className="card">
-          {currentUser?.username === user.username && (
-            <div className="d-flex justify-content-end">
-              <span
-                className="text-primary cursor-pointer"
-                onClick={() => logout()}
-                style={{ cursor: "pointer", padding: "10px" }}
+        <div style={{ marginRight: "30px" }}>
+          <div
+            style={{
+              position: "relative",
+              width: "150px",
+              height: "150px",
+              borderRadius: "50%",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src={newImage ? URL.createObjectURL(newImage) : image}
+              alt="Profile"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+            {currentUser?.username === user.username && (
+              <button
+                type="button"
+                onClick={handleClick}
+                style={{
+                  position: "absolute",
+                  bottom: "10px",
+                  right: "10px",
+                  background: "rgba(0, 150, 255, 0.7)",
+                  borderRadius: "50%",
+                  padding: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  border: "none",
+                }}
               >
-                Logout
-              </span>
-              <span
-                className="text-primary cursor-pointer"
-                onClick={() => setActiveTab("Edit")}
-                style={{ cursor: "pointer", padding: "10px" }}
-              >
-                Edit
-              </span>
-            </div>
-          )}
-  
-          <div className="card-body pb-0">
-            <div className="row align-items-center">
-              <div className="col-md-3">
-                <div
-                  className="text-center border-end"
-                  style={{ padding: "20px", position: "relative" }}
-                >
-                  <img
-                    src={newImage ? URL.createObjectURL(newImage) : image}
-                    className="img-fluid avatar-xxl rounded-circle"
-                    alt="Profile"
-                    style={{ width: "120px", height: "120px" }}
-                  />
-                  {currentUser?.username === user.username && (
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={handleClick}
-                      style={{
-                        position: "absolute",
-                        bottom: "10px",
-                        right: "30px",
-                        background: "rgb(0, 150, 255)",
-                        borderRadius: "50%",
-                        padding: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faImage} className="fa-xl" />
-                    </button>
-                  )}
-                  <input
-                    style={{ display: "none" }}
-                    ref={photoGalleryRef}
-                    type="file"
-                    onChange={(event) => {
-                      if (event.target.files) {
-                        setNewImage(event.target.files[0]);
-                        uploadCurrentPhoto(event.target.files[0]);
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="col-md-9">
-                <div className="ms-3">
-                  <div className="row my-4 align-items-center">
-                    <div className="col-md-10 d-flex align-items-center">
-                      <div>
-                        <h4
-                          className="text-primary font-size-20 mb-0 me-3"
-                          style={{ padding: "6px" }}
-                        >
-                          {user.username}
-                        </h4>
-                        
-                        
-                      </div>
-                    </div>
-                  </div>
-  
-                  <ul
-                    className="nav nav-tabs nav-tabs-custom border-bottom-0 mt-3 nav-justified"
-                    role="tablist"
-                  >
-                    <li className="nav-item" role="presentation">
-                      <button
-                        className={`nav-link px-4 ${
-                          activeTab === "myRecipes" ? "active" : ""
-                        }`}
-                        onClick={() => setActiveTab("myRecipes")}
-                        role="tab"
-                        tabIndex={-1}
-                      >
-                        <span className="d-block d-sm-none">
-                          <i className="mdi mdi-menu-open"></i>
-                        </span>
-                        <span className="d-none d-sm-block">Books</span>
-                      </button>
-                    </li>
-                    {currentUser?.username === user.username && (
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className={`nav-link px-4 ${
-                            activeTab === "foodNow" ? "active" : ""
-                          }`}
-                          onClick={() => setActiveTab("foodNow")}
-                          role="tab"
-                          tabIndex={-1}
-                        >
-                          <span className="d-block d-sm-none">
-                            <i className="fas fa-home"></i>
-                          </span>
-                          <span className="d-none d-sm-block">Favorites</span>
-                        </button>
-                      </li>
-                    )}
-                    
-                  </ul>
-                </div>
-              </div>
-            </div>
+                <FontAwesomeIcon icon={faImage} style={{ color: "#fff" }} />
+              </button>
+            )}
+            <input
+              style={{ display: "none" }}
+              ref={photoGalleryRef}
+              type="file"
+              onChange={(event) => {
+                if (event.target.files) {
+                  setNewImage(event.target.files[0]);
+                  uploadCurrentPhoto(event.target.files[0]);
+                }
+              }}
+            />
           </div>
         </div>
-      </div>
-  
-      <div
-        className="tab-content-container"
-        style={{ width: "100%", maxWidth: "1000px", marginTop: "20px" }}
-      >
-        <div className="tab-content mt-4">
-          {activeTab === "myRecipes" && (
-            <div className="tab-pane fade show active">
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-                {myBooks.map((book) => (
-                  <div
-                    key={book._id}
-                    style={{ flex: "1 1 calc(33.333% - 10px)" }}
-                  >
-                    <BookRow
-                      url={`/bookReview/${book._id!}`}
-                      image={book.coverImg}
-                      title={book.title}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-  
-          {activeTab === "foodNow" && (
-            <div className="tab-pane fade show active">
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-                {favorites.map((book) => (
-                  <div
-                    key={book._id}
-                    style={{ flex: "1 1 calc(33.333% - 10px)" }}
-                  >
-                    <BookRow
-                      url={`/bookReview/${book._id!}`}
-                      image={book.coverImg}
-                      title={book.title}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          
-  
-          {activeTab === "Edit" && (
-            <div className="tab-pane fade show active">
-              <ChangePassword
-                afterEdit={() => {
-                  setActiveTab("");
-                  setRenderNeeded((prev) => !prev);
+        <div>
+          <h2 style={{ fontSize: "28px", fontWeight: 300, margin: 0 }}>
+            {user.username}
+          </h2>
+          {currentUser?.username === user.username && (
+            <div style={{ marginTop: "10px" }}>
+              <button
+                onClick={() => setActiveTab("Edit")}
+                style={{
+                  padding: "5px 10px",
+                  fontSize: "14px",
+                  border: "1px solid #dbdbdb",
+                  borderRadius: "4px",
+                  backgroundColor: "#fff",
+                  cursor: "pointer",
+                  marginRight: "10px",
                 }}
-              />
+              >
+                Edit Profile
+              </button>
+              <button
+                onClick={logout}
+                style={{
+                  padding: "5px 10px",
+                  fontSize: "14px",
+                  border: "1px solid #dbdbdb",
+                  borderRadius: "4px",
+                  backgroundColor: "#fff",
+                  cursor: "pointer",
+                }}
+              >
+                Logout
+              </button>
             </div>
           )}
         </div>
+      </div>
+
+      {/* Tabs */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <button
+          onClick={() => setActiveTab("myBooks")}
+          style={{
+            fontSize: "16px",
+            fontWeight: "500",
+            borderBottom: activeTab === "myBooks" ? "2px solid #000" : "none",
+            padding: "10px 20px",
+            cursor: "pointer",
+            background: "none",
+            border: "none",
+          }}
+        >
+          Books
+        </button>
+        {currentUser?.username === user.username && (
+          <button
+            onClick={() => setActiveTab("favorites")}
+            style={{
+              fontSize: "16px",
+              fontWeight: "500",
+              borderBottom:
+                activeTab === "favorites" ? "2px solid #000" : "none",
+              padding: "10px 20px",
+              cursor: "pointer",
+              background: "none",
+              border: "none",
+            }}
+          >
+            Favorites
+          </button>
+        )}
+      </div>
+
+      {/* Book Grid */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)", // 3 columns per row
+          gap: "20px",
+        }}
+      >
+        {activeTab === "myBooks" &&
+          myBooks.map((book) => (
+            <BookRow
+              key={book._id}
+              image={book.coverImg}
+              title={book.title}
+              url={`/bookReview/${book._id}`}
+            />
+          ))}
+
+        {activeTab === "favorites" &&
+          favorites.map((book) => (
+            <BookRow
+              key={book._id}
+              image={book.coverImg}
+              title={book.title}
+              url={`/books/${book._id}`}
+            />
+          ))}
+
+        {activeTab === "Edit" && (
+          <ChangePassword
+            afterEdit={() => {
+              setActiveTab("");
+              setRenderNeeded((prev) => !prev);
+            }}
+          />
+        )}
       </div>
     </div>
   );
