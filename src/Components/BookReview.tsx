@@ -140,7 +140,6 @@ export default function BookReview() {
     );
   }
   if (!book) return;
-  if (!book) return;
 
   return (
     <div

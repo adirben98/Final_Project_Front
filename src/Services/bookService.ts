@@ -84,10 +84,9 @@ class BookService {
     return apiClient.delete(`/book/${id}`);
   }
 
-  generateImage(prompt:string,index:number,id:string, hero:string) {
-    const controller= new AbortController()
-    const generateImage= apiClient.post<string>(`/book/generateImage/${id}`,{prompt,index,hero},{signal:controller.signal})
-    return {generateImage, cancelGenerateImage: () => controller.abort()}
+  generateImage(prompt:string,index:number,id:string, hero:string,signal:AbortSignal) {
+    const generateImage= apiClient.post<string>(`/book/generateImage/${id}`,{prompt,index,hero},{signal:signal})
+    return {generateImage}
   }
   getTopBooks() {
     const controller = new AbortController();
