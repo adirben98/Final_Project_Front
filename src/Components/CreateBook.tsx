@@ -110,7 +110,9 @@ const CreateStory: React.FC = () => {
 
   const handleCreateStoryClick = () => {
     if (!prompt) {
-      setWarningMessage("Please enter your book idea before creating the story.");
+      setWarningMessage(
+        "Please enter your book idea before creating the story."
+      );
     } else {
       setWarningMessage(""); // Clear the warning message if prompt is provided
       setIsConfirmationDialogOpen(true); // Open the confirmation dialog
@@ -124,6 +126,11 @@ const CreateStory: React.FC = () => {
   const handleConfirmCreateStory = () => {
     setIsConfirmationDialogOpen(false);
     generateStory(); // Call the function to generate the story
+  };
+  const loaderContainerStyle: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center", // Center the loader and text horizontally
   };
 
   const loaderOverlayStyle: React.CSSProperties = {
@@ -147,7 +154,12 @@ const CreateStory: React.FC = () => {
     height: "60px",
     animation: "spin 1s linear infinite",
   };
-
+  const loaderTextStyle: React.CSSProperties = {
+    marginTop: "20px",
+    color: "#fff",
+    fontSize: "16px",
+    textAlign: "center",
+  };
   const spinKeyframes = `
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -308,7 +320,6 @@ const CreateStory: React.FC = () => {
         </button>
       </dialog>
 
-      {/* New Confirmation Dialog */}
       {isConfirmationDialogOpen && (
         <dialog
           open
@@ -457,9 +468,15 @@ const CreateStory: React.FC = () => {
             )}
             {loading && (
               <div style={loaderOverlayStyle}>
-                <div style={loaderStyle}></div>
+                <div style={loaderContainerStyle}>
+                  <div style={loaderStyle}></div>
+                  <p style={loaderTextStyle}>
+                    Generating the story might take up to 2 minutes...
+                  </p>
+                </div>
               </div>
             )}
+
             <button
               style={{
                 ...ButtonStyle,

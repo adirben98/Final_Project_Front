@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth, { CanceledError } from "../Hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBook,
-  faThumbsUp,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBook, faThumbsUp, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Comment, { IComment } from "./Comment";
 import CommentCreate from "./CommentCreation";
 import userService from "../Services/userService";
@@ -37,7 +33,7 @@ export default function BookReview() {
       });
   }
 
-  function enterBook(){
+  function enterBook() {
     window.location.href = `/book/${id}`;
   }
 
@@ -92,11 +88,12 @@ export default function BookReview() {
   }, [id, isLoading, renderNeeded]);
 
   async function likeClick() {
-    let isAuthor=false
-    if(userService.getConnectedUser()!.username === book.author )isAuthor=true
+    let isAuthor = false;
+    if (userService.getConnectedUser()!.username === book.author)
+      isAuthor = true;
     if (!like) {
       bookService
-        .like(id!,isAuthor)
+        .like(id!, isAuthor)
         .then(() => {
           setBook((prevBook) => ({
             ...prevBook,
@@ -109,7 +106,7 @@ export default function BookReview() {
         });
     } else {
       bookService
-        .unlike(id!,isAuthor)
+        .unlike(id!, isAuthor)
         .then(() => {
           setBook((prevBook) => ({
             ...prevBook,
@@ -141,7 +138,7 @@ export default function BookReview() {
       </div>
     );
   }
-  if (!book)return
+  if (!book) return;
 
   return (
     <div
@@ -177,9 +174,8 @@ export default function BookReview() {
       </div>
       <div>
         <h2 style={{ fontWeight: "bolder", margin: "10px 0" }}>{book.title}</h2>
-        {istheAuthor && (
-          <div style={{ display: "flex", alignItems: "center" }}>
-           
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {istheAuthor && (
             <button
               type="button"
               className="btn"
@@ -190,18 +186,19 @@ export default function BookReview() {
             >
               <FontAwesomeIcon icon={faTrash} className="fa-xl tinted-icon" />
             </button>
-            <button
-              type="button"
-              className="btn"
-              onClick={() => {
-                enterBook();
-              }}
-              style={{ marginRight: "10px" }}
-            >
-              <FontAwesomeIcon icon={faBook} className="fa-xl tinted-icon" />
-            </button>
-          </div>
-        )}
+          )}
+
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              enterBook();
+            }}
+            style={{ marginRight: "10px" }}
+          >
+            <FontAwesomeIcon icon={faBook} className="fa-xl tinted-icon" />
+          </button>
+        </div>
       </div>
       <p style={{ margin: "10px 0", textAlign: "center" }}>
         {book.description}
@@ -253,7 +250,7 @@ export default function BookReview() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          {(
+          {
             <button
               type="button"
               className="btn"
@@ -271,7 +268,7 @@ export default function BookReview() {
                 style={{ color: like ? "green" : "inherit" }}
               />
             </button>
-          )}
+          }
           <span style={{ padding: "25px 20px" }}>Likes: {book.likes}</span>
         </div>
       </div>

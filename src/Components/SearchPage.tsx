@@ -101,45 +101,51 @@ export default function SearchPage() {
               {"Your search result for: "}
               {queryParam}
             </h2>
-            <button
-              onClick={() => handleButtonClick("books")}
-              style={{
-                padding: "10px 20px",
-                marginRight: "10px",
-                backgroundColor: func === "books" ? "#007bff" : "#6c757d",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                transition: "background-color 0.3s ease, transform 0.2s ease",
-                transform: func === "books" ? "scale(1.05)" : "scale(1)",
-                textTransform: "uppercase",
-                fontWeight: "bold",
-                letterSpacing: "1px",
-              }}
-            >
-              Books
-            </button>
-            <button
-              onClick={() => handleButtonClick("users")}
-              style={{
-                padding: "10px 20px",
-                backgroundColor: func === "users" ? "#007bff" : "#6c757d",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                transition: "background-color 0.3s ease, transform 0.2s ease",
-                transform: func === "users" ? "scale(1.05)" : "scale(1)",
-                textTransform: "uppercase",
-                fontWeight: "bold",
-                letterSpacing: "1px",
-              }}
-            >
-              Users
-            </button>
+            {func !== "hero" && (
+              <div>
+                <button
+                  onClick={() => handleButtonClick("books")}
+                  style={{
+                    padding: "10px 20px",
+                    marginRight: "10px",
+                    backgroundColor: func === "books" ? "#007bff" : "#6c757d",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                    transition:
+                      "background-color 0.3s ease, transform 0.2s ease",
+                    transform: func === "books" ? "scale(1.05)" : "scale(1)",
+                    textTransform: "uppercase",
+                    fontWeight: "bold",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  Books
+                </button>
+                <button
+                  onClick={() => handleButtonClick("users")}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: func === "users" ? "#007bff" : "#6c757d",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                    transition:
+                      "background-color 0.3s ease, transform 0.2s ease",
+                    transform: func === "users" ? "scale(1.05)" : "scale(1)",
+                    textTransform: "uppercase",
+                    fontWeight: "bold",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  Users
+                </button>
+              </div>
+            )}
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "15px" }}>
             {func === "users"
