@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import useAuth, { CanceledError } from "../Hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faThumbsUp, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { faBook, faThumbsUp, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Comment, { IComment } from "./Comment";
 import CommentCreate from "./CommentCreation";
 import userService from "../Services/userService";
@@ -34,7 +33,6 @@ export default function BookReview() {
       });
   }
 
-  function enterBook() {
   function enterBook() {
     window.location.href = `/book/${id}`;
   }
@@ -96,7 +94,6 @@ export default function BookReview() {
     if (!like) {
       bookService
         .like(id!, isAuthor)
-        .like(id!, isAuthor)
         .then(() => {
           setBook((prevBook) => ({
             ...prevBook,
@@ -109,7 +106,6 @@ export default function BookReview() {
         });
     } else {
       bookService
-        .unlike(id!, isAuthor)
         .unlike(id!, isAuthor)
         .then(() => {
           setBook((prevBook) => ({
