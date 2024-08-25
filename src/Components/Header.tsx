@@ -83,6 +83,7 @@ export default function Header() {
             fontFamily: "'Fredoka One', cursive",
             color: "#3e3e3e"
           }}>Bookify</span>
+          <span style={{ fontSize: "0.7rem", color: "#3e3e3e", marginTop:"55px" }}>light up your imagination</span>
         </Link>
         <button
           className="navbar-toggler"

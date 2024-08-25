@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth, { CanceledError } from "../Hooks/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBook,
-  faThumbsUp,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBook, faThumbsUp, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Comment, { IComment } from "./Comment";
 import CommentCreate from "./CommentCreation";
 import userService from "../Services/userService";
@@ -37,7 +33,7 @@ export default function BookReview() {
       });
   }
 
-  function enterBook(){
+  function enterBook() {
     window.location.href = `/book/${id}`;
   }
 
@@ -92,11 +88,11 @@ export default function BookReview() {
   }, [id, isLoading, renderNeeded]);
 
   async function likeClick() {
-    let isAuthor=false
-    if(userService.getConnectedUser()!.username === book.author )isAuthor=true
+    let isAuthor = false;
+    if (userService.getConnectedUser()!.username === book.author) isAuthor = true;
     if (!like) {
       bookService
-        .like(id!,isAuthor)
+        .like(id!, isAuthor)
         .then(() => {
           setBook((prevBook) => ({
             ...prevBook,
@@ -109,7 +105,7 @@ export default function BookReview() {
         });
     } else {
       bookService
-        .unlike(id!,isAuthor)
+        .unlike(id!, isAuthor)
         .then(() => {
           setBook((prevBook) => ({
             ...prevBook,
@@ -131,17 +127,18 @@ export default function BookReview() {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          backgroundColor: "#f0f8ff",
         }}
       >
         <div
-          className="spinner-border text-primary"
+          className="spinner-border"
           role="status"
-          style={{ width: "3rem", height: "3rem" }}
+          style={{ width: "3rem", height: "3rem", borderColor: "#ff69b4" }}
         ></div>
       </div>
     );
   }
-  if (!book)return
+  if (!book) return;
 
   return (
     <div
@@ -150,101 +147,140 @@ export default function BookReview() {
         flexDirection: "column",
         alignItems: "center",
         fontFamily: "'Open Sans', sans-serif",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#f0f8ff",
         padding: "20px",
         minHeight: "100vh",
+        maxWidth: "1200px",
+        margin: "0 auto",
+        position: "relative",
       }}
     >
       <div
         style={{
-          height: "400px",
-          width: "100%",
+          height: "300px",
+          width: "auto",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           position: "relative",
+          borderRadius: "12px",
+          overflow: "hidden",
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+          marginBottom: "20px",
+          backgroundColor: "#fff",
         }}
       >
         <img
           src={book.coverImg}
           style={{
-            width: "500px",
+            width: "auto",
             height: "100%",
             objectFit: "cover",
+            borderRadius: "12px",
           }}
           alt="Book Cover"
         />
       </div>
-      <div>
-        <h2 style={{ fontWeight: "bolder", margin: "10px 0" }}>{book.title}</h2>
-        {istheAuthor && (
-          <div style={{ display: "flex", alignItems: "center" }}>
-           
-            <button
-              type="button"
-              className="btn"
-              onClick={() => {
-                deleteBook();
-              }}
-              style={{ marginRight: "10px" }}
-            >
-              <FontAwesomeIcon icon={faTrash} className="fa-xl tinted-icon" />
-            </button>
-            <button
-              type="button"
-              className="btn"
-              onClick={() => {
-                enterBook();
-              }}
-              style={{ marginRight: "10px" }}
-            >
-              <FontAwesomeIcon icon={faBook} className="fa-xl tinted-icon" />
-            </button>
-          </div>
-        )}
-      </div>
-      <p style={{ margin: "10px 0", textAlign: "center" }}>
+      <h2 style={{ fontWeight: "700", margin: "10px 0", textAlign: "center", fontSize: "2.5rem", color: "#ff6347" }}>
+        {book.title}
+      </h2>
+      {istheAuthor && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            margin: "20px 0",
+            justifyContent: "center", 
+          }}
+        >
+          <button
+            type="button"
+            onClick={deleteBook}
+            style={{
+              backgroundColor: "#ff1493",
+              border: "none",
+              color: "#fff",
+              padding: "12px 18px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              marginRight: "15px",
+              fontSize: "18px",
+              transition: "background-color 0.3s ease",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <FontAwesomeIcon icon={faTrash} style={{ marginRight: "8px" }} />
+            Delete
+          </button>
+          <button
+            type="button"
+            onClick={enterBook}
+            style={{
+              backgroundColor: "#1e90ff",
+              border: "none",
+              color: "#fff",
+              padding: "12px 18px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "18px",
+              transition: "background-color 0.3s ease",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <FontAwesomeIcon icon={faBook} style={{ marginRight: "8px" }} />
+            Read
+          </button>
+        </div>
+      )}
+      <p style={{ margin: "10px 0", textAlign: "center", fontSize: "1.2rem", color: "#555" }}>
         {book.description}
       </p>
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-start", 
           width: "100%",
+          maxWidth: "800px",
           margin: "20px 0",
+          fontSize: "1.1rem",
+          color: "#555",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
+    
+        <div style={{ display: "flex", alignItems: "center", marginRight: "30px" }}>
           <img
             src={book.authorImg}
             style={{
               borderRadius: "50%",
-              width: "50px",
-              height: "50px",
+              width: "50px",  
+              height: "50px", 
               cursor: "pointer",
+              border: "2px solid #ff69b4",
+              marginRight: "15px",
             }}
             alt="Author"
             onClick={() => (window.location.href = `/profile/${book.author}`)}
           />
-          <h3 style={{ marginLeft: "10x" }}>{book.author}</h3>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginLeft: "10px",
-            }}
-          >
-            <span style={{ margin: "0 10px" }}>|</span>
+          <div>
+            <h3 style={{ margin: "0", fontSize: "1rem", color: "#333" }}> {/* **Changed to 1rem for smaller text** */}
+              {book.author}
+            </h3>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <h5 style={{ fontSize: "14px", fontWeight: "bold", margin: 0 }}>
+              <h5 style={{ fontSize: "12px", fontWeight: "600", margin: 0 }}> {/* **Changed to 12px for smaller text** */}
                 Created At:
               </h5>
               <p
                 style={{
-                  fontSize: "12px",
-                  fontWeight: "bold",
+                  fontSize: "12px",  // **Changed to 12px for smaller text**
                   margin: "0 0 0 10px",
+                  color: "#333",
                 }}
               >
                 {book.createdAt}
@@ -252,37 +288,36 @@ export default function BookReview() {
             </div>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {(
-            <button
-              type="button"
-              className="btn"
-              onClick={likeClick}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                marginRight: "10px",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faThumbsUp}
-                className={`fa-xl tinted-icon ${like ? "liked" : ""}`}
-                style={{ color: like ? "green" : "inherit" }}
-              />
-            </button>
-          )}
-          <span style={{ padding: "25px 20px" }}>Likes: {book.likes}</span>
+        {/* Like Button */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}>
+          <button
+            type="button"
+            onClick={likeClick}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              marginRight: "15px",
+              fontSize: "1.5rem",
+              color: like ? "#ff4500" : "#6c757d",
+              transition: "color 0.3s ease",
+            }}
+          >
+            <FontAwesomeIcon icon={faThumbsUp} />
+          </button>
+          <span style={{ fontSize: "1.2rem", color: "#555" }}>Likes: {book.likes}</span>
         </div>
       </div>
 
-      <h2 style={{ marginTop: "50px", textAlign: "center" }}>Comments</h2>
+      <h2 style={{ marginTop: "50px", textAlign: "center", fontSize: "1.8rem", color: "#ff6347" }}>
+        Comments
+      </h2>
       <CommentCreate
         author={userService.getConnectedUser()!.username!}
         bookId={`${id}`}
         handle={() => setRenderNeeded(!renderNeeded)}
       />
-      <div>
+      <div style={{ width: "100%", maxWidth: "800px", marginTop: "20px" }}>
         {comments.map((comment, index) => (
           <Comment
             key={index}
