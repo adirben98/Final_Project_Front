@@ -8,10 +8,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import { FaBook } from "react-icons/fa";
-import homePageVid from "../assets/homePageVid.mp4";
+import coverHome from "../assets/coverHome.mp4";
 import { Link } from "react-router-dom";
 import useOnScreen from "../Hooks/useOnScreen";
-import bookService,{ IBook } from "../Services/bookService";
+import bookService, { IBook } from "../Services/bookService";
 import BookRow from "./BookRow";
 
 const HomePage: React.FC = () => {
@@ -41,39 +41,31 @@ const HomePage: React.FC = () => {
   const videoContainerStyle: React.CSSProperties = {
     position: "relative",
     width: "100%",
-    height: "60vh",
+    height: "0",
+    paddingBottom: "42.85%", 
     overflow: "hidden",
-    borderRadius: "15px",
-    backgroundColor: "#87CEEB", // Light blue sky background color
+    borderRadius: "0",
+    backgroundColor: "#87CEEB", 
   };
 
   const videoStyle: React.CSSProperties = {
-    width: "100%",
-    height: "60vh",
-    objectFit: "cover",
     position: "absolute",
-    filter: "brightness(90%)", // Slightly darker video for better text contrast
-  };
-
-  const overlayTextStyle: React.CSSProperties = {
-    position: "absolute",
-    top: "30%",
-    left: "50%",
-    transform: "translateX(-50%)",
-    color: "#FFD700", // Gold color
-    fontSize: "3em", // Smaller font size
-    fontFamily: "'Fredoka One', cursive",
-    textShadow: "3px 3px 6px rgba(0, 0, 0, 0.7)",
-    zIndex: 2,
+    top: "0",
+    left: "0",
+    width: "auto",
+    height: "100%",
+    objectFit: "contain",
+    filter: "brightness(90%)",
+     
   };
 
   const contentStyle: React.CSSProperties = {
     boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
     padding: "20px",
     borderRadius: "20px",
-    backgroundColor: "#FFF8DC", // Cornsilk color
+    backgroundColor: "#FFF8DC", 
     width: "100%",
-    maxWidth: "1400px", // Increase max-width to reduce white spaces
+    maxWidth: "1400px", 
     margin: "20px auto",
     display: "flex",
     flexDirection: "column",
@@ -184,10 +176,10 @@ const HomePage: React.FC = () => {
     });
     getTopBooks.then((response) => {
       setTopBooks(response.data);
-    })
+    });
     return () => {
       cancelHeroes();
-      cancelGetTopBooks()
+      cancelGetTopBooks();
     };
   }, [isLoading]);
 
@@ -203,8 +195,7 @@ const HomePage: React.FC = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", paddingTop: "0" }}>
       <div style={videoContainerStyle}>
-        <video src={homePageVid} autoPlay loop muted style={videoStyle} />
-        <div style={overlayTextStyle}>Welcome to Bookify!</div>
+        <video src={coverHome} autoPlay loop muted style={videoStyle} />
       </div>
       <div style={contentStyle}>
         <section ref={ref1} style={openingPhraseStyle}>
@@ -222,47 +213,7 @@ const HomePage: React.FC = () => {
           Start Your Adventure Now{" "}
           <FaBook style={{ marginLeft: "10px", color: "#ff4500" }} />
         </section>
-        <section style={{ marginBottom: "30px", width: "100%" }}>
-          <h2 style={subHeaderStyle}>Top 5 Books of the Week</h2>
-          <ul>
-            {topBooks.map((book) => (
-             <li
-             key={book._id}
-             style={{
-               flex: "1 1 calc(33.333% - 15px)",
-               boxSizing: "border-box",
-               minWidth: "10px", 
-               display: "flex",
-               flexDirection: "column",
-             }}
-           >
-             <BookRow
-               image={book.coverImg}
-               url={`/bookReview/${book._id}`}
-               title={book.title}
-             />
-           </li>
-            ))}
-          </ul>
-        </section>
-        <section style={{ marginBottom: "30px", width: "100%" }}>
-          <h2 style={subHeaderStyle}>Latest Books Created</h2>
-          <ul>
-            {latestBooks.map((book, index) => (
-              <li
-                key={index}
-                style={{
-                  fontSize: "1.2em", // Smaller font size
-                  color: "#32cd32",
-                  marginBottom: "10px",
-                  fontFamily: "'Comic Sans MS', cursive",
-                }}
-              >
-                {book}
-              </li>
-            ))}
-          </ul>
-        </section>
+
         <section style={carouselContainerStyle}>
           <h2 style={subHeaderStyle}>Meet Your Heroes</h2>
           <div style={{ width: "30%", padding: "20px 0", margin: "0 auto", textAlign: "left" }}>
@@ -281,6 +232,42 @@ const HomePage: React.FC = () => {
               ))}
             </Slider>
           </div>
+        </section>
+
+        <section style={carouselContainerStyle}>
+          <h2 style={subHeaderStyle}>Top 5 Books of the Week</h2>
+          <div style={{ width: "80%", padding: "20px 0", margin: "0 auto", textAlign: "left" }}>
+            <Slider {...settings}>
+              {topBooks.map((book) => (
+                <div key={book._id}>
+                  <BookRow
+                    image={book.coverImg}
+                    url={`/bookReview/${book._id}`}
+                    title={book.title}
+                  />
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </section>
+
+        <section style={{ marginBottom: "30px", width: "100%" }}>
+          <h2 style={subHeaderStyle}>Latest Books Created</h2>
+          <ul>
+            {latestBooks.map((book, index) => (
+              <li
+                key={index}
+                style={{
+                  fontSize: "1.2em", // Smaller font size
+                  color: "#32cd32",
+                  marginBottom: "10px",
+                  fontFamily: "'Comic Sans MS', cursive",
+                }}
+              >
+                {book}
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
     </div>

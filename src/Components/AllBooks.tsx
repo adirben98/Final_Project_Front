@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import bookService,{IBook} from "../Services/bookService"
+import bookService, { IBook } from "../Services/bookService";
 import BookRow from "./BookRow";
 import useAuth from "../Hooks/useAuth";
 
@@ -10,13 +10,13 @@ export default function AllBooks() {
   const { isLoading } = useAuth();
 
   useEffect(() => {
-    getBooks.then((res) => setBooks(res.data)).catch((err) =>
-      console.log(err)
-    );
+    getBooks
+      .then((res) => setBooks(res.data))
+      .catch((err) => console.log(err));
     setLoading(isLoading);
 
     return () => {
-        cancelBooks();
+      cancelBooks();
     };
   }, [isLoading]);
 
@@ -40,37 +40,25 @@ export default function AllBooks() {
   }
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1>All Books</h1>
-      <ul
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "15px",
-          listStyle: "none",
-          padding: 0,
-          margin: 0,
-        }}
-      >
-        {books.map((book) => (
-          <li
-            key={book._id}
-            style={{
-              flex: "1 1 calc(33.333% - 15px)",
-              boxSizing: "border-box",
-              minWidth: "10px", 
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <BookRow
-              image={book.coverImg}
-              url={`/bookReview/${book._id}`}
-              title={book.title}
-            />
-          </li>
-        ))}
-      </ul>
+    <div
+      style={{
+        padding: "20px",
+        fontFamily: "Arial, sans-serif",
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "20px", // Adjust gap to align with the `HeroRow` component
+        justifyContent: "space-between",
+      }}
+    >
+      <h1 style={{ width: "100%", marginBottom: "20px" }}>All Books</h1>
+      {books.map((book) => (
+        <BookRow
+          key={book._id}
+          image={book.coverImg}
+          url={`/bookReview/${book._id}`}
+          title={book.title}
+        />
+      ))}
     </div>
   );
 }
