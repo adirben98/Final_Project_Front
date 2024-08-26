@@ -40,12 +40,11 @@ const HomePage: React.FC = () => {
 
   const videoContainerStyle: React.CSSProperties = {
     position: "relative",
-    width: "100%",
-    height: "0",
+    width: "50%",
+    height: "auto",
     paddingBottom: "42.85%", 
     overflow: "hidden",
-    borderRadius: "0",
-    backgroundColor: "#87CEEB", 
+    borderRadius: "0",  
   };
 
   const videoStyle: React.CSSProperties = {
@@ -56,27 +55,29 @@ const HomePage: React.FC = () => {
     height: "100%",
     objectFit: "contain",
     filter: "brightness(90%)",
-     
   };
 
-  const contentStyle: React.CSSProperties = {
-    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
+  const contentContainerStyle: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    width: "100%",
+    height: "auto",
     padding: "20px",
+    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
     borderRadius: "20px",
     backgroundColor: "#FFF8DC", 
-    width: "100%",
-    maxWidth: "1400px", 
     margin: "20px auto",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    paddingTop: "20px",
-    zIndex: 1,
-    border: "2px solid #FF69B4", // Hot pink border
+    maxWidth: "1400px",
+  };
+
+  const textContainerStyle: React.CSSProperties = {
+    width: "50%",
+    padding: "20px",
   };
 
   const openingPhraseStyle: React.CSSProperties = {
-    fontSize: "2.5em", // Smaller font size
+    fontSize: "2.5em",
     color: "#ff4500",
     fontFamily: "'Fredoka One', cursive",
     textAlign: "center",
@@ -85,7 +86,7 @@ const HomePage: React.FC = () => {
   };
 
   const descriptionStyle: React.CSSProperties = {
-    fontSize: "1.2em", // Smaller font size
+    fontSize: "1.2em",
     color: "#555",
     textAlign: "center",
     margin: "20px 0",
@@ -98,7 +99,7 @@ const HomePage: React.FC = () => {
   };
 
   const catchphraseStyle: React.CSSProperties = {
-    fontSize: "1.8em", // Smaller font size
+    fontSize: "1.8em",
     color: "#32cd32",
     textAlign: "center",
     margin: "20px 0",
@@ -107,7 +108,7 @@ const HomePage: React.FC = () => {
   };
 
   const subHeaderStyle: React.CSSProperties = {
-    fontSize: "2em", // Smaller font size
+    fontSize: "2em",
     color: "#FF69B4",
     marginBottom: "20px",
     textAlign: "left",
@@ -127,7 +128,7 @@ const HomePage: React.FC = () => {
   };
 
   const heroNameStyle: React.CSSProperties = {
-    fontSize: "1.8em", // Smaller font size
+    fontSize: "1.8em",
     color: "#ff4500",
     textAlign: "center",
     marginTop: "10px",
@@ -145,7 +146,7 @@ const HomePage: React.FC = () => {
     top: "50%",
     transform: "translateY(-50%)",
     zIndex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.7)", // Darker background for arrows
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     borderRadius: "50%",
     cursor: "pointer",
   };
@@ -154,7 +155,7 @@ const HomePage: React.FC = () => {
     onClick,
   }) => (
     <div style={{ ...arrowStyle }} onClick={onClick}>
-      <ChevronLeft size={40} color="white" /> {/* Smaller arrow size */}
+      <ChevronLeft size={40} color="white" />
     </div>
   );
 
@@ -162,7 +163,7 @@ const HomePage: React.FC = () => {
     onClick,
   }) => (
     <div style={{ ...arrowStyle, right: "5px" }} onClick={onClick}>
-      <ChevronRight size={40} color="white" /> {/* Smaller arrow size */}
+      <ChevronRight size={40} color="white" />
     </div>
   );
 
@@ -194,82 +195,84 @@ const HomePage: React.FC = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", paddingTop: "0" }}>
-      <div style={videoContainerStyle}>
-        <video src={coverHome} autoPlay loop muted style={videoStyle} />
+      <div style={contentContainerStyle}>
+        <div style={textContainerStyle}>
+          <section ref={ref1} style={openingPhraseStyle}>
+            Welcome to Bookify!
+          </section>
+          <section ref={ref2} style={descriptionStyle}>
+            At Bookify, your imagination is the limit! Create your own magical
+            adventures, choose your favorite heroes, and dive into a world full of
+            fun and excitement. Whether you're making up stories about dragons,
+            superheroes, or talking animals, there's no end to the fun you can
+            have. Share your amazing creations with friends and let everyone see
+            the stories only you can dream up!
+          </section>
+          <section ref={ref3} style={catchphraseStyle}>
+            Start Your Adventure Now{" "}
+            <FaBook style={{ marginLeft: "10px", color: "#ff4500" }} />
+          </section>
+        </div>
+        <div style={videoContainerStyle}>
+          <video src={coverHome} autoPlay loop muted style={videoStyle} />
+        </div>
       </div>
-      <div style={contentStyle}>
-        <section ref={ref1} style={openingPhraseStyle}>
-          Welcome to Bookify!
-        </section>
-        <section ref={ref2} style={descriptionStyle}>
-          At Bookify, your imagination is the limit! Create your own magical
-          adventures, choose your favorite heroes, and dive into a world full of
-          fun and excitement. Whether you're making up stories about dragons,
-          superheroes, or talking animals, there's no end to the fun you can
-          have. Share your amazing creations with friends and let everyone see
-          the stories only you can dream up!
-        </section>
-        <section ref={ref3} style={catchphraseStyle}>
-          Start Your Adventure Now{" "}
-          <FaBook style={{ marginLeft: "10px", color: "#ff4500" }} />
-        </section>
 
-        <section style={carouselContainerStyle}>
-          <h2 style={subHeaderStyle}>Meet Your Heroes</h2>
-          <div style={{ width: "30%", padding: "20px 0", margin: "0 auto", textAlign: "left" }}>
-            <Slider {...settings}>
-              {heroes.map((hero, index) => (
-                <div key={index}>
-                  <Link to={`/search?q=${hero.name}&f=hero`}>
-                    <img
-                      src={hero.image}
-                      alt={hero.name}
-                      style={heroImageStyle}
-                    />
-                  </Link>
-                  <p style={heroNameStyle}>{hero.name}</p>
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </section>
-
-        <section style={carouselContainerStyle}>
-          <h2 style={subHeaderStyle}>Top 5 Books of the Week</h2>
-          <div style={{ width: "80%", padding: "20px 0", margin: "0 auto", textAlign: "left" }}>
-            <Slider {...settings}>
-              {topBooks.map((book) => (
-                <div key={book._id}>
-                  <BookRow
-                    image={book.coverImg}
-                    url={`/bookReview/${book._id}`}
-                    title={book.title}
+      <section style={carouselContainerStyle}>
+        <h2 style={subHeaderStyle}>Meet Your Heroes</h2>
+        <div style={{ width: "30%", padding: "20px 0", margin: "0 auto", textAlign: "left" }}>
+          <Slider {...settings}>
+            {heroes.map((hero, index) => (
+              <div key={index}>
+                <Link to={`/search?q=${hero.name}&f=hero`}>
+                  <img
+                    src={hero.image}
+                    alt={hero.name}
+                    style={heroImageStyle}
                   />
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </section>
-
-        <section style={{ marginBottom: "30px", width: "100%" }}>
-          <h2 style={subHeaderStyle}>Latest Books Created</h2>
-          <ul>
-            {latestBooks.map((book, index) => (
-              <li
-                key={index}
-                style={{
-                  fontSize: "1.2em", // Smaller font size
-                  color: "#32cd32",
-                  marginBottom: "10px",
-                  fontFamily: "'Comic Sans MS', cursive",
-                }}
-              >
-                {book}
-              </li>
+                </Link>
+                <p style={heroNameStyle}>{hero.name}</p>
+              </div>
             ))}
-          </ul>
-        </section>
-      </div>
+          </Slider>
+        </div>
+      </section>
+
+      <section style={carouselContainerStyle}>
+        <h2 style={subHeaderStyle}>Top 5 Books of the Week</h2>
+        <div style={{ width: "60%", padding: "20px 0", margin: "0 auto", textAlign: "left" }}>
+          <Slider {...settings}>
+            {topBooks.map((book) => (
+              <div key={book._id}>
+                <BookRow
+                  image={book.coverImg}
+                  url={`/bookReview/${book._id}`}
+                  title={book.title}
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </section>
+
+      <section style={{ marginBottom: "30px", width: "100%" }}>
+        <h2 style={subHeaderStyle}>Latest Books Created</h2>
+        <ul>
+          {latestBooks.map((book, index) => (
+            <li
+              key={index}
+              style={{
+                fontSize: "1.2em",
+                color: "#32cd32",
+                marginBottom: "10px",
+                fontFamily: "'Comic Sans MS', cursive",
+              }}
+            >
+              {book}
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 };

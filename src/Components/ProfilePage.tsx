@@ -36,8 +36,7 @@ export default function ProfilePage() {
     const url = await uploadPhoto(photo);
     userService
       .updateUserImage(url)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         setRenderNeeded((prev) => !prev);
       })
       .catch((error) => {
@@ -116,10 +115,11 @@ export default function ProfilePage() {
     <div
       className="profile-page-container"
       style={{
-        maxWidth: "935px",
+        maxWidth: "100%",
         margin: "0 auto",
         padding: "20px",
-        fontFamily: "'Helvetica Neue', sans-serif",
+        fontFamily: "'Poppins', sans-serif",
+        background: "linear-gradient(to bottom, #f0f9ff, #e0f7fa)",
       }}
     >
       {/* Profile Header */}
@@ -129,6 +129,9 @@ export default function ProfilePage() {
           display: "flex",
           alignItems: "center",
           marginBottom: "40px",
+          borderRadius: "8px",
+          padding: "20px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
         <div style={{ marginRight: "30px" }}>
@@ -139,6 +142,8 @@ export default function ProfilePage() {
               height: "150px",
               borderRadius: "50%",
               overflow: "hidden",
+              border: "5px solid #fda085",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             }}
           >
             <img
@@ -158,7 +163,7 @@ export default function ProfilePage() {
                   position: "absolute",
                   bottom: "10px",
                   right: "10px",
-                  background: "rgba(0, 150, 255, 0.7)",
+                  background: "#fda085",
                   borderRadius: "50%",
                   padding: "10px",
                   display: "flex",
@@ -185,7 +190,7 @@ export default function ProfilePage() {
           </div>
         </div>
         <div>
-          <h2 style={{ fontSize: "28px", fontWeight: 300, margin: 0 }}>
+          <h2 style={{ fontSize: "28px", fontWeight: 600, margin: 0, color: "#333" }}>
             {user.username}
           </h2>
           {currentUser?.username === user.username && (
@@ -193,13 +198,15 @@ export default function ProfilePage() {
               <button
                 onClick={() => setActiveTab("Edit")}
                 style={{
-                  padding: "5px 10px",
+                  padding: "8px 16px",
                   fontSize: "14px",
                   border: "1px solid #dbdbdb",
                   borderRadius: "4px",
-                  backgroundColor: "#fff",
+                  backgroundColor: "#fda085",
+                  color: "#fff",
                   cursor: "pointer",
                   marginRight: "10px",
+                  transition: "background-color 0.3s",
                 }}
               >
                 Edit Profile
@@ -207,12 +214,14 @@ export default function ProfilePage() {
               <button
                 onClick={logout}
                 style={{
-                  padding: "5px 10px",
+                  padding: "8px 16px",
                   fontSize: "14px",
                   border: "1px solid #dbdbdb",
                   borderRadius: "4px",
-                  backgroundColor: "#fff",
+                  backgroundColor: "#ff6f61",
+                  color: "#fff",
                   cursor: "pointer",
+                  transition: "background-color 0.3s",
                 }}
               >
                 Logout
@@ -235,14 +244,17 @@ export default function ProfilePage() {
           style={{
             fontSize: "16px",
             fontWeight: "500",
-            borderBottom: activeTab === "myBooks" ? "2px solid #000" : "none",
             padding: "10px 20px",
             cursor: "pointer",
             background: "none",
             border: "none",
+            color: activeTab === "myBooks" ? "#333" : "#888",
+            borderBottom:
+              activeTab === "myBooks" ? "3px solid #fda085" : "none",
+            transition: "color 0.3s, border-bottom 0.3s",
           }}
         >
-          Books
+          My Books
         </button>
         {currentUser?.username === user.username && (
           <button
@@ -250,12 +262,14 @@ export default function ProfilePage() {
             style={{
               fontSize: "16px",
               fontWeight: "500",
-              borderBottom:
-                activeTab === "favorites" ? "2px solid #000" : "none",
               padding: "10px 20px",
               cursor: "pointer",
               background: "none",
               border: "none",
+              color: activeTab === "favorites" ? "#333" : "#888",
+              borderBottom:
+                activeTab === "favorites" ? "3px solid #fda085" : "none",
+              transition: "color 0.3s, border-bottom 0.3s",
             }}
           >
             Favorites
@@ -263,33 +277,69 @@ export default function ProfilePage() {
         )}
       </div>
 
-      {/* Book Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)", // 3 columns per row
-          gap: "20px",
-        }}
-      >
-        {activeTab === "myBooks" &&
-          myBooks.map((book) => (
-            <BookRow
-              key={book._id}
-              image={book.coverImg}
-              title={book.title}
-              url={`/bookReview/${book._id}`}
-            />
-          ))}
+      {/* Tab Content */}
+      <div>
+        {activeTab === "myBooks" && (
+          <div>
+            <h3
+              style={{
+                color: "#555",
+                fontSize: "22px",
+                fontWeight: 500,
+                marginBottom: "20px",
+              }}
+            >
+              My Books
+            </h3>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: "20px",
+              }}
+            >
+              {myBooks.map((book) => (
+                <BookRow
+                  key={book._id}
+                  image={book.coverImg}
+                  title={book.title}
+                  url={`/bookReview/${book._id}`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
-        {activeTab === "favorites" &&
-          favorites.map((book) => (
-            <BookRow
-              key={book._id}
-              image={book.coverImg}
-              title={book.title}
-              url={`/books/${book._id}`}
-            />
-          ))}
+        {activeTab === "favorites" && (
+          <div>
+            <h3
+              style={{
+                color: "#555",
+                fontSize: "22px",
+                fontWeight: 500,
+                marginBottom: "20px",
+              }}
+            >
+              Favorite Books
+            </h3>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: "20px",
+              }}
+            >
+              {favorites.map((book) => (
+                <BookRow
+                  key={book._id}
+                  image={book.coverImg}
+                  title={book.title}
+                  url={`/books/${book._id}`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
         {activeTab === "Edit" && (
           <ChangePassword
