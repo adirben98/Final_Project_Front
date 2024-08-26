@@ -287,7 +287,7 @@ export default function ProfilePage() {
               key={book._id}
               image={book.coverImg}
               title={book.title}
-              url={`/books/${book._id}`}
+              url={`/bookReview/${book._id}`}
             />
           ))}
 
