@@ -22,6 +22,8 @@ const HomePage: React.FC = () => {
   ];
 
   const [topBooks, setTopBooks] = useState<IBook[]>([]);
+  const [top10Books, setTop10Books] = useState<IBook[]>([]);
+  const [randomBooks, setRandomBooks] = useState<IBook[]>([]);
   const { getTopBooks, cancelGetTopBooks } = bookService.getTopBooks();
 
   const ref1 = useRef<HTMLDivElement>(null);
@@ -116,7 +118,7 @@ const HomePage: React.FC = () => {
 
   const heroImageStyle: React.CSSProperties = {
     width: "auto",
-    height: "200px", // Smaller height for images
+    height: "200px", 
     maxWidth: "100%",
     objectFit: "cover",
     margin: "0 auto",
@@ -125,6 +127,7 @@ const HomePage: React.FC = () => {
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
     transform: "scale(1)",
     transition: "transform 0.3s ease-in-out",
+    cursor: "pointer",
   };
 
   const heroNameStyle: React.CSSProperties = {
@@ -176,21 +179,33 @@ const HomePage: React.FC = () => {
       setHeroes(response.data);
     });
     getTopBooks.then((response) => {
-      setTopBooks(response.data);
+      const books = response.data;
+      setTopBooks(books.slice(0, 5)); // Top 5 books
+      setTop10Books(books.slice(0, 10)); // Top 10 books
+      setRandomBooks(books.sort(() => Math.random() - 0.5).slice(0, 10)); // Random 10 books
     });
+
     return () => {
       cancelHeroes();
       cancelGetTopBooks();
     };
   }, [isLoading]);
 
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    prevArrow: <PreviousArrow />,
-    nextArrow: <NextArrow />,
+  const bookGridStyle: React.CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "repeat(5, 1fr)",
+    gap: "20px",
+    width: "90%",
+    margin: "0 auto",
+    padding: "20px 0",
+  };
+
+  const bookCardStyle: React.CSSProperties = {
+    padding: "10px",
+    textAlign: "center",
+    borderRadius: "10px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    backgroundColor: "#FFF8DC",
   };
 
   return (
@@ -220,17 +235,26 @@ const HomePage: React.FC = () => {
 
       <section style={carouselContainerStyle}>
         <h2 style={subHeaderStyle}>Meet Your Heroes</h2>
-        <div style={{ width: "30%", padding: "20px 0", margin: "0 auto", textAlign: "left" }}>
-          <Slider {...settings}>
-            {heroes.map((hero, index) => (
-              <div key={index}>
-                <Link to={`/search?q=${hero.name}&f=hero`}>
-                  <img
-                    src={hero.image}
-                    alt={hero.name}
-                    style={heroImageStyle}
-                  />
-                </Link>
+        <div style={{ width: "60%", margin: "0 auto" }}>
+          <Slider
+            infinite
+            slidesToShow={3}
+            slidesToScroll={1}
+            prevArrow={<PreviousArrow />}
+            nextArrow={<NextArrow />}
+            dots
+            autoplay
+            autoplaySpeed={3000}
+            cssEase="linear"
+          >
+            {heroes.map((hero) => (
+              <div key={hero.name}>
+                <img
+                  src={hero.image}
+                  alt={hero.name}
+                  style={heroImageStyle}
+                  onClick={() => {window.location.href = `/search?q=${hero.name}&f=hero`}}
+                />
                 <p style={heroNameStyle}>{hero.name}</p>
               </div>
             ))}
@@ -238,40 +262,56 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <section style={carouselContainerStyle}>
-        <h2 style={subHeaderStyle}>Top 5 Books of the Week</h2>
-        <div style={{ width: "60%", padding: "20px 0", margin: "0 auto", textAlign: "left" }}>
-          <Slider {...settings}>
-            {topBooks.map((book) => (
-              <div key={book._id}>
-                <BookRow
-                  image={book.coverImg}
-                  url={`/bookReview/${book._id}`}
-                  title={book.title}
+      {/* Top 10 Books Section */}
+      <section>
+        <h2 style={subHeaderStyle}>Top 10 Books of the Week</h2>
+        <div style={bookGridStyle}>
+          {top10Books.map((book) => (
+            <div key={book._id} style={bookCardStyle}>
+              <Link to={`/bookReview/${book._id}`}>
+                <img
+                  src={book.coverImg}
+                  alt={book.title}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
                 />
-              </div>
-            ))}
-          </Slider>
+                <p style={{ fontSize: "1.2em", color: "#ff4500" }}>
+                  {book.title}
+                </p>
+              </Link>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section style={{ marginBottom: "30px", width: "100%" }}>
-        <h2 style={subHeaderStyle}>Latest Books Created</h2>
-        <ul>
-          {latestBooks.map((book, index) => (
-            <li
-              key={index}
-              style={{
-                fontSize: "1.2em",
-                color: "#32cd32",
-                marginBottom: "10px",
-                fontFamily: "'Comic Sans MS', cursive",
-              }}
-            >
-              {book}
-            </li>
+      {/* Random 10 Books Section */}
+      <section>
+        <h2 style={subHeaderStyle}>Random 10 Books</h2>
+        <div style={bookGridStyle}>
+          {randomBooks.map((book) => (
+            <div key={book._id} style={bookCardStyle}>
+              <Link to={`/bookReview/${book._id}`}>
+                <img
+                  src={book.coverImg}
+                  alt={book.title}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
+                />
+                <p style={{ fontSize: "1.2em", color: "#ff4500" }}>
+                  {book.title}
+                </p>
+              </Link>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
     </div>
   );
