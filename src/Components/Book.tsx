@@ -144,7 +144,8 @@ const Book: React.FC = () => {
 
         const initialClickedBtns = new Array(
           fetchedBook.data.paragraphs.length + 1
-        ).fill(false);
+        ).fill(true);
+        initialClickedBtns[0] = false
         setClickedBtns(initialClickedBtns);
 
         if (fetchedBook.data.images.length === 0) {
@@ -155,15 +156,7 @@ const Book: React.FC = () => {
               { prompt: fetchedBook.data.prompts[i], index: i, hero },
               { signal: controller.signal }
             );
-            // bookService
-            //   .generateImage(
-            //     fetchedBook.data.prompts[i],
-            //     i,
-            //     id!,
-            //     fetchedBook.data.hero,
-            //     controller.signal
-            //   )
-            //   .generateImage.then((res) => {
+       
             controllers.push(controller);
             setPages((prevPages) => {
               const newPages = [...prevPages];
@@ -232,7 +225,7 @@ const Book: React.FC = () => {
                   <div className="front">
                     <div id={"f" + counter} className="front-content">
                       <div className="spinner"></div>{" "}
-                      {/* Spinner displayed here */}
+                      
                     </div>
                   </div>
                 )}
