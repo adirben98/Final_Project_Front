@@ -21,6 +21,11 @@ interface BooksAndFavorites {
   favorites: IBook[];
 }
 
+interface HomePageBooks{
+  topTenBooks:IBook[];
+  randomBooks:IBook[];
+}
+
 class BookService {
   generateBook(hero: string, prompt: string) {
     return apiClient.post<string>("/book/generateBook", { hero, prompt });
@@ -88,12 +93,12 @@ class BookService {
     const generateImage= apiClient.post<string>(`/book/generateImage/${id}`,{prompt,index,hero},{signal:signal})
     return {generateImage}
   }
-  getTopBooks() {
+  getTopAndRandomBooks() {
     const controller = new AbortController();
-    const getTopBooks = apiClient.get<IBook[]>("/book/getTopBooks", {
+    const getBooks = apiClient.get<HomePageBooks>("/book/getTopAndRandomBooks", {
       signal: controller.signal,
     });
-    return { getTopBooks, cancelGetTopBooks: () => controller.abort() };
+    return { getBooks, cancelGetBooks: () => controller.abort() };
   }
 }
 export default new BookService();

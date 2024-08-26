@@ -12,19 +12,13 @@ import coverHome from "../assets/coverHome.mp4";
 import { Link } from "react-router-dom";
 import useOnScreen from "../Hooks/useOnScreen";
 import bookService, { IBook } from "../Services/bookService";
-import BookRow from "./BookRow";
 
 const HomePage: React.FC = () => {
-  const latestBooks: string[] = [
-    "Latest Book 1",
-    "Latest Book 2",
-    "Latest Book 3",
-  ];
+  
 
-  const [topBooks, setTopBooks] = useState<IBook[]>([]);
   const [top10Books, setTop10Books] = useState<IBook[]>([]);
   const [randomBooks, setRandomBooks] = useState<IBook[]>([]);
-  const { getTopBooks, cancelGetTopBooks } = bookService.getTopBooks();
+  const { getBooks, cancelGetBooks } = bookService.getTopAndRandomBooks();
 
   const ref1 = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
@@ -178,16 +172,15 @@ const HomePage: React.FC = () => {
     getHeroes.then((response) => {
       setHeroes(response.data);
     });
-    getTopBooks.then((response) => {
+    getBooks.then((response) => {
       const books = response.data;
-      setTopBooks(books.slice(0, 5)); // Top 5 books
-      setTop10Books(books.slice(0, 10)); // Top 10 books
-      setRandomBooks(books.sort(() => Math.random() - 0.5).slice(0, 10)); // Random 10 books
+      setTop10Books(books.topTenBooks); 
+      setRandomBooks(books.randomBooks); 
     });
 
     return () => {
       cancelHeroes();
-      cancelGetTopBooks();
+      cancelGetBooks();
     };
   }, [isLoading]);
 
