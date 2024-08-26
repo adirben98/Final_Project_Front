@@ -107,7 +107,13 @@ const HomePage: React.FC = () => {
     fontSize: "2em",
     color: "#FF69B4",
     marginBottom: "20px",
-    textAlign: "left",
+    textAlign: "center",
+    fontFamily: "'Fredoka One', cursive",
+
+  };
+  const additionSubHeaderStyle: React.CSSProperties = {
+   ...subHeaderStyle,
+    marginTop: "90px",
   };
 
   const heroImageStyle: React.CSSProperties = {
@@ -257,7 +263,7 @@ const HomePage: React.FC = () => {
 
       {/* Top 10 Books Section */}
       <section>
-        <h2 style={subHeaderStyle}>Top 10 Books of the Week</h2>
+        <h2 style={additionSubHeaderStyle}>Top 10 Books of the Week</h2>
         <div style={bookGridStyle}>
           {top10Books.map((book) => (
             <div key={book._id} style={bookCardStyle}>
@@ -283,7 +289,7 @@ const HomePage: React.FC = () => {
 
       {/* Random 10 Books Section */}
       <section>
-        <h2 style={subHeaderStyle}>Random 10 Books</h2>
+        <h2 style={additionSubHeaderStyle}>Random 10 Books</h2>
         <div style={bookGridStyle}>
           {randomBooks.map((book) => (
             <div key={book._id} style={bookCardStyle}>
