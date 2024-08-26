@@ -169,6 +169,12 @@ const Book: React.FC = () => {
             );
           }
         }
+        else{
+          const initialClickedBtns = new Array(
+            fetchedBook.data.paragraphs.length + 1
+          ).fill(false);
+          setClickedBtns(initialClickedBtns);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -208,7 +214,7 @@ const Book: React.FC = () => {
                       <img
                         src={frontPage}
                         alt={`front-${counter}`}
-                        style={{ width: "300px", height: "300px" }}
+                        style={{ width: "300px", height: "400px" }}
                       />
                     </div>
                     {isAuthor && (

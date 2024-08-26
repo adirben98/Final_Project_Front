@@ -310,15 +310,7 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {activeTab === "favorites" &&
-          favorites.map((book) => (
-            <BookRow
-              key={book._id}
-              image={book.coverImg}
-              title={book.title}
-              url={`/bookReview/${book._id}`}
-            />
-          ))}
+       
         {activeTab === "favorites" && (
           <div>
             <h3

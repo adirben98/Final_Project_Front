@@ -58,6 +58,8 @@ const CreateStory: React.FC = () => {
   const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
     useState<boolean>(false);
   const [warningMessage, setWarningMessage] = useState<string>("");
+  const [isInstructionDialogOpen, setIsInstructionDialogOpen] =
+    useState<boolean>(true);
 
   useEffect(() => {
     getHeroes
@@ -127,6 +129,7 @@ const CreateStory: React.FC = () => {
     setIsConfirmationDialogOpen(false);
     generateStory(); // Call the function to generate the story
   };
+
   const loaderContainerStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
@@ -154,12 +157,14 @@ const CreateStory: React.FC = () => {
     height: "60px",
     animation: "spin 1s linear infinite",
   };
+
   const loaderTextStyle: React.CSSProperties = {
     marginTop: "20px",
     color: "#fff",
     fontSize: "16px",
     textAlign: "center",
   };
+
   const spinKeyframes = `
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -193,6 +198,7 @@ const CreateStory: React.FC = () => {
     transition: "transform 0.4s ease, box-shadow 0.4s ease",
     transform: isSelected ? "scale(1.07)" : "scale(0.8)",
     outline: "2px solid white",
+    cursor: "pointer",
   });
 
   const heroNameStyle: React.CSSProperties = {
@@ -203,12 +209,10 @@ const CreateStory: React.FC = () => {
     fontFamily: "'Lobster', cursive",
   };
 
-  const ButtonStyle: React.CSSProperties = {
-    display: selectedHero !== null ? "block" : "none",
-    margin: "-50px auto",
-    marginLeft: "700px",
-    width: "60px",
+  const buttonCommonStyle: React.CSSProperties = {
+    display: "inline-block",
     height: "60px",
+    lineHeight: "60px", // Ensures text is vertically centered
     fontSize: "18px",
     fontWeight: "bold",
     color: "#fff",
@@ -217,9 +221,12 @@ const CreateStory: React.FC = () => {
     borderRadius: "50%",
     cursor: "pointer",
     textAlign: "center",
-    lineHeight: "60px",
     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
     outline: "none",
+    marginTop: "10px",
+  };
+  const closeInstructionDialog = () => {
+    setIsInstructionDialogOpen(false);
   };
 
   const handleNextButtonMouseEnter = (
@@ -319,6 +326,86 @@ const CreateStory: React.FC = () => {
           Close
         </button>
       </dialog>
+      {step === 2 && isInstructionDialogOpen && (
+        <dialog
+          open
+          style={{
+            width: "400px", // Increased width for better readability
+            padding: "20px",
+            border: "none",
+            borderRadius: "8px",
+            backgroundColor: "#fff",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "left", // Left-align text for better readability
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 1001,
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "24px",
+              marginBottom: "15px",
+              color: "#333",
+              textAlign: "center", // Center the heading
+              fontFamily: "Arial, sans-serif",
+            }}
+          >
+            Instructions!
+          </h2>
+
+          <p
+            style={{
+              marginBottom: "20px",
+              fontSize: "18px",
+              color: "#555",
+              fontFamily: "Arial, sans-serif",
+            }}
+          >
+            Here are some guidelines to help you write a great story:
+          </p>
+          <ul
+            style={{
+              marginBottom: "20px",
+              paddingLeft: "20px", // Indentation for list items
+              color: "#333",
+              fontSize: "16px",
+              lineHeight: "1.6",
+              fontFamily: "Arial, sans-serif",
+            }}
+          >
+            <li>
+              Make sure you don't mix two different worlds of heroes, for
+              example: Sponge-Bob and Iron Man.
+            </li>
+            <li>
+              Our model is sensitive to inappropriate content, so please avoid
+              using any inappropriate content.
+            </li>
+          </ul>
+          <div style={{ textAlign: "center" }}>
+            {" "}
+            {/* Center the button */}
+            <button
+              onClick={closeInstructionDialog}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#dc3545",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </dialog>
+      )}
 
       {isConfirmationDialogOpen && (
         <dialog
@@ -346,25 +433,9 @@ const CreateStory: React.FC = () => {
               fontFamily: "Arial, sans-serif",
             }}
           >
-            Are you ready to create your original story?
+            Are you ready to dive into your story?
           </p>
           <div>
-            <button
-              onClick={handleConfirmCreateStory}
-              style={{
-                padding: "10px 20px",
-                marginRight: "10px",
-                backgroundColor: "#28a745",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "16px",
-                fontWeight: "bold",
-              }}
-            >
-              Yes, create me
-            </button>
             <button
               onClick={handleDialogClose}
               style={{
@@ -379,6 +450,22 @@ const CreateStory: React.FC = () => {
               }}
             >
               Not yet
+            </button>
+            <button
+              onClick={handleConfirmCreateStory}
+              style={{
+                padding: "10px 20px",
+                marginRight: "10px",
+                backgroundColor: "#28a745",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              Create
             </button>
           </div>
         </dialog>
@@ -424,14 +511,21 @@ const CreateStory: React.FC = () => {
                 </p>
               )}
             </div>
-            <button
-              style={ButtonStyle}
+            {hero &&<button
+              style={{
+                ...buttonCommonStyle,
+                width: "100%",
+                marginTop: "20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
               onClick={handleNextStep}
               onMouseEnter={handleNextButtonMouseEnter}
               onMouseLeave={handleNextButtonMouseLeave}
             >
-              Next
-            </button>
+              Continue to Story
+            </button>}
           </>
         )}
 
@@ -444,7 +538,7 @@ const CreateStory: React.FC = () => {
                 fontFamily: "Arial, sans-serif",
               }}
             >
-              Your Story
+              Your Tail
             </h2>
             <textarea
               onBlur={(e) => setPrompt(e.target.value)}
@@ -476,45 +570,34 @@ const CreateStory: React.FC = () => {
                 </div>
               </div>
             )}
-
-            <button
-              style={{
-                ...ButtonStyle,
-                backgroundColor: "lightblue",
-                marginLeft: "390px",
-              }}
-              onMouseEnter={handleNextButtonMouseEnter}
-              onMouseLeave={handleNextButtonMouseLeave}
-              onClick={handleCreateStoryClick} // Check and open the confirmation dialog
-            >
-              Create Story
-            </button>
-
-            <button
-              style={{
-                display: selectedHero !== null ? "block" : "none",
-                width: "60px",
-                marginLeft: "20px",
-                height: "60px",
-                fontSize: "18px",
-                fontWeight: "bold",
-                color: "#fff",
-                backgroundColor: "lightblue",
-                border: "none",
-                borderRadius: "50%",
-                cursor: "pointer",
-                textAlign: "center",
-                lineHeight: "60px",
-                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                outline: "none",
-                marginTop: "-60px",
-              }}
-              onMouseEnter={handleNextButtonMouseEnter}
-              onMouseLeave={handleNextButtonMouseLeave}
-              onClick={() => setStep(step - 1)}
-            >
-              Back
-            </button>
+            <div>
+              <button
+                style={{
+                  ...buttonCommonStyle,
+                  width: "150px",
+                  marginRight: "20px",
+                }}
+                onMouseEnter={handleNextButtonMouseEnter}
+                onMouseLeave={handleNextButtonMouseLeave}
+                onClick={() => {
+                  setWarningMessage("");
+                  setStep(step - 1);
+                }}
+              >
+                Back
+              </button>
+              <button
+                style={{
+                  ...buttonCommonStyle,
+                  width: "150px",
+                }}
+                onMouseEnter={handleNextButtonMouseEnter}
+                onMouseLeave={handleNextButtonMouseLeave}
+                onClick={handleCreateStoryClick} // Check and open the confirmation dialog
+              >
+                Create Story
+              </button>
+            </div>
           </div>
         )}
       </section>
