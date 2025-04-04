@@ -1,4 +1,4 @@
-# FINAL_PROJECT_FRONTEND - AI Children's Books Generator
+# Bookify - AI Children's Books
 
 
 A web application that generates personalized children's books using AI. This frontend connects to a backend API that handles the AI generation and book creation.
