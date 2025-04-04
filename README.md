@@ -21,14 +21,14 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the backend repository first** (required for full functionality):
    ```bash
-   git clone https://github.com/your-username/backend-repo.git
-   cd backend-repo
+   git clone https://github.com/adirben98/Final_Project_Backend
+   cd Final_Project_Backend
    npm install
    npm start
    ```
 2. **Clone this frontend repository**:
    ```
-   git clone https://github.com/your-username/Final_Project_Frontend.git
+   git clone https://github.com/adirben98/Final_Project_Frontend
    cd Final_Project_Frontend
    ```
 3. **Install dependencies**:
