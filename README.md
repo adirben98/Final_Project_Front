@@ -7,8 +7,6 @@ A web application that generates personalized children's books using AI. This fr
 
 - 🎨 Create custom children's books with AI-generated content
 - 📖 Interactive book preview and reading interface
-- 🖌️ Customize characters, themes, and story elements
-- 📱 Responsive design for desktop and mobile
 - 🔐 User authentication and book saving functionality
 
 ## Prerequisites
