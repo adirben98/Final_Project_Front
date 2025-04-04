@@ -30,8 +30,8 @@ Before you begin, ensure you have the following installed:
    ```
 2. **Clone this frontend repository**:
    ```
-   git clone https://github.com/your-username/FINAL_PROJECT_FRONTEND.git
-   cd FINAL_PROJECT_FRONTEND
+   git clone https://github.com/your-username/Final_Project_Frontend.git
+   cd Final_Project_Frontend
    ```
 3. **Install dependencies**:
    ```
