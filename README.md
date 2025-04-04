@@ -41,7 +41,8 @@ Before you begin, ensure you have the following installed:
    ```
 The application should now be running on http://localhost:3000.
 
-    
+![Description of the image](./photo1)
+
 
 
 
